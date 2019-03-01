@@ -5,8 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="1"
+        android:alignmentMode="alignMargins"
+        android:columnOrderPreserved="false"
+        >
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/MyBook_list"
+        android:id="@+id/myBook_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    </GridLayout>
+
 </RelativeLayout>

@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.carematch">
 
+
+
+
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -11,9 +16,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+
+
+        <meta-data android:name="com.facebook.accountkit.ApplicationName"
+            android:value="@string/app_name" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/FACEBOOK_APP_ID" />
+        <meta-data android:name="com.facebook.accountkit.ClientToken"
+            android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
+
+        <activity
+            android:name="com.facebook.accountkit.ui.AccountKitActivity" />
+
+
+        <!--<meta-data-->
+            <!--android:name="com.facebook.sdk.ApplicationId"-->
+            <!--android:value="@string/facebook_app_id" />-->
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -32,19 +50,35 @@
             </intent-filter>
         </activity>
         <activity android:name=".Medical_Resourse_SearchActivity" />
+
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+
+
+
+
+
+        <activity android:name=".Register1Activity"/>
+
+
+
+
+
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
+
+
+
         <activity android:name=".ProductInformationActivity" />
-        <activity android:name=".StoreActivity" />
         <activity android:name=".ProductsList" />
-        <activity android:name=".MyBookList" />
         <activity android:name=".DiscussActivity" />
         <activity android:name=".mybookActivity" />
         <activity android:name=".BookingActivity" />
@@ -52,7 +86,21 @@
         <activity android:name=".FavoriteActivity" />
         <activity android:name=".TransportationActivity" />
         <activity android:name=".ArticleActivity" />
-        <activity android:name=".MapActivity"></activity>
+
+        <activity android:name=".MapActivity" />
+        <activity android:name=".Activity_First1" />
+
+
+
+
+
+
+
+
+
+
+
+
     </application>
 
 </manifest>

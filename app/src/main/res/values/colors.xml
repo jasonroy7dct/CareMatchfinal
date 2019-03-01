@@ -3,13 +3,15 @@
     <color name="colorPrimary">#1d90cf</color>
     <color name="pink">#f5a0a0</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#f5a0a0</color>
     <color name="colorblack">#000000</color>
     <color name="black">#000000</color>
-    <color name="white">#fafafa</color>
+    <color name="white">#ffffff</color>
     <color name="grey">#e6e6e6</color>
     <color name="startblue">#1d90cf</color>
     <color name="endblue">#5dcef4</color>
+    <color name="bgcolor">#fafafa</color>
+
 
 
 

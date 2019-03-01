@@ -1,5 +1,6 @@
 package com.example.user.carematch;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-public class FavoriteFragment extends android.support.v4.app.Fragment  {
+public class FavoriteFragment extends android.support.v4.app.Fragment {
 
     private View b;
     private ImageButton imageButton_logo;

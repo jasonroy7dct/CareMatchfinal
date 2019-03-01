@@ -40,13 +40,15 @@ public class Medical_Resourse_SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_medical__resourse__search);
+        setContentView(R.layout.fragment_medical_resource_search);
+
+
+
         ProductsList = new ArrayList<>();
         ProductsListAdapter = new ProductsListAdapter(getApplicationContext(),ProductsList);
         //取得RecylerView物件，設定佈局及adapter
         mMainList = (RecyclerView) findViewById(R.id.products_list);
         mMainList.setHasFixedSize(true);
-//        mMainList.setLayoutManager(new LinearLayoutManager(this));
         mMainList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mMainList.setAdapter(ProductsListAdapter);
 

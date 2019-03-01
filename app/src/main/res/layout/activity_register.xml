@@ -7,7 +7,9 @@
     android:paddingLeft="30dp"
     android:paddingRight="30dp"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:id="@+id/content"
+    >
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -18,15 +20,15 @@
             android:hint="Email"
             android:id="@+id/editEmail"/>
     </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Name"
-            android:id="@+id/editName"/>
-    </android.support.design.widget.TextInputLayout>
+    <!--<android.support.design.widget.TextInputLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+    <!--<EditText-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:hint="Name"-->
+    <!--android:id="@+id/editName"/>-->
+    <!--</android.support.design.widget.TextInputLayout>-->
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -36,6 +38,16 @@
             android:hint="Password"
             android:id="@+id/editPassword"/>
     </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"
+            android:id="@+id/editConfirmedPassword"/>
+    </android.support.design.widget.TextInputLayout>
+
 
 
     <Button

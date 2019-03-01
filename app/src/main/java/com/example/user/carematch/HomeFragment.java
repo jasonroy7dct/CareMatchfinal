@@ -1,116 +1,180 @@
 package com.example.user.carematch;
 
+//jason
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 
 public class HomeFragment extends android.support.v4.app.Fragment {
 
     private View a;
-    private ImageButton imageButton_book;
+    private ImageButton imageButton_booking;
     private ImageButton imageButton_medical;
     private ImageButton imageButton_trans;
     private ImageButton imageButton_discuss;
     private ImageButton imageButton_read;
 
+    public Context context;
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+
+    Intent bookIntent;
+    String bookBody = "試試看成功沒";
 
 
+    //打開預約booking
+    private Button testbutton;
 
-    void testPush() {
-        Log.d("test","test使用push上傳程式");
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_home,container,false);
+        final View homefragmentview = inflater.inflate(R.layout.fragment_home, container, false);
 
-        a = inflater.inflate(R.layout.fragment_home,container,false);
+//        a = inflater.inflate(R.layout.fragment_home,container,false);
 
-
-        imageButton_discuss=  a.findViewById(R.id.imageButton_discuss);
-        imageButton_book=  a.findViewById(R.id.imageButton_book);
-        imageButton_medical=  a.findViewById(R.id.imageButton_medical);
-        imageButton_trans = a.findViewById(R.id.imageButton_trans);
-        imageButton_read = a.findViewById(R.id.imageButton_read);
+//        imageButton_discuss=  homefragment.findViewById(R.id.imageButton_discuss);
+//        imageButton_medical=  homefragment.findViewById(R.id.imageButton_medical);
+//        imageButton_trans = homefragment.findViewById(R.id.imageButton_trans);
+//        imageButton_read = homefragment.findViewById(R.id.imageButton_read);
 
 
-
-        imageButton_discuss.setOnClickListener(new View.OnClickListener() {
+        //打開預約booking
+        imageButton_booking=(ImageButton) homefragmentview.findViewById(R.id.imageButton_booking);
+        imageButton_booking.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View d) {
-                openDiscussActivity();
+            public void onClick(View view) {
 
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frahome, new Fragment_Booking())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
-        imageButton_book.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View d) {
-                openBookingActivity();
+        //交通預約
+        imageButton_trans=(ImageButton) homefragmentview.findViewById(R.id.imageButton_trans);
+        imageButton_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-            }
+                    fragmentManager = getFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frahome, new Fragment_Transportation())
+                            .addToBackStack(null)
+                            .commit();
+                }
         });
+        //醫療這夜先不能點，因為裡面還沒做好
+        imageButton_medical=(ImageButton) homefragmentview.findViewById(R.id.imageButton_medical);
         imageButton_medical.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View d) {
-                openMedicalResourseSearchActivity();
+            public void onClick(View view) {
 
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frahome, new MedicalResourceSearchFragment())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
-        imageButton_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View d) {
-                openmyTransportationActivity();
 
-            }
+//        @Override
+//        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+//            LinearLayout linearLayout = new LinearLayout(getActivity());
+//            //linearLayout.setOrientation(0);
+//            TextView textView = getTextView();
+//            textView.setText(getChild(groupPosition, childPosition).toString());
+//            linearLayout.addView(textView);
+//            return linearLayout;
+//        }
+//        @Override
+//        public boolean isChildSelectable(int groupPosition, int childPosition) {
+//            return true;
+//        }
+//    };
 
-        });
 
-        imageButton_read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View d) {
-                openArticleActivity();
 
-            }
 
-        });
+//        imageButton_discuss.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View d) {
+//
+//                openDiscussActivity();
+//
+//            }
+//        });
+//
+//        imageButton_medical.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View d) {
+//                openMedicalResourseSearchActivity();
+//
+//            }
+//        });
+//        imageButton_trans.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View d) {
+//                openmyTransportationActivity();
+//
+//            }
+//
+//        });
+//
+//        imageButton_read.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View d) {
+//                openArticleActivity();
+//
+//            }
+//
+//        });
 
-        return a;
+        return homefragmentview;
     }
 
 
 
-    public void openDiscussActivity(){
-        Intent intent = new Intent(HomeFragment.this.getActivity(),DiscussActivity.class);
-        startActivity(intent);
-    }
-    public void openMedicalResourseSearchActivity(){
-        Intent intent = new Intent(HomeFragment.this.getActivity(),Medical_Resourse_SearchActivity.class);
-        startActivity(intent);
-    }
-
-    public void openBookingActivity(){
-        Intent intent = new Intent(HomeFragment.this.getActivity(),BookingActivity.class);
-        startActivity(intent);
-    }
-    public void openmybookActivity(){
-        Intent intent = new Intent(HomeFragment.this.getActivity(),mybookActivity.class);
-        startActivity(intent);
-    }
-    public void openmyTransportationActivity(){
-        Intent intent = new Intent(HomeFragment.this.getActivity(),TransportationActivity.class);
-        startActivity(intent);
-    }
-    public void openArticleActivity(){
-        Intent intent = new Intent(HomeFragment.this.getActivity(),DiscussActivity.class);
-        startActivity(intent);
-    }
+//    public void openDiscussActivity(){
+//        Intent intent = new Intent(HomeFragment.this.getActivity(),TestFragment.class);
+//        startActivity(intent);
+//    }
+//    public void openMedicalResourseSearchActivity(){
+//        Intent intent = new Intent(HomeFragment.this.getActivity(),Medical_Resourse_SearchActivity.class);
+//        startActivity(intent);
+//    }
+//
+//    public void openBookingActivity(){
+//        Intent intent = new Intent(HomeFragment.this.getActivity(),BookingActivity.class);
+//        startActivity(intent);
+//    }
+//
+//    public void openmyTransportationActivity(){
+//        Intent intent = new Intent(HomeFragment.this.getActivity(),TransportationActivity.class);
+//        startActivity(intent);
+//    }
+//    public void openArticleActivity(){
+//        Intent intent = new Intent(HomeFragment.this.getActivity(),DiscussActivity.class);
+//        startActivity(intent);
+//    }
 
 
 
