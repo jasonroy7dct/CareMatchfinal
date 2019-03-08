@@ -3,9 +3,7 @@
     package="com.example.user.carematch">
 
 
-
-
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
@@ -18,12 +16,21 @@
         android:theme="@style/AppTheme">
 
 
+
+
+
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_API_key" />
+
         <meta-data android:name="com.facebook.accountkit.ApplicationName"
             android:value="@string/app_name" />
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/FACEBOOK_APP_ID" />
         <meta-data android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
+
 
         <activity
             android:name="com.facebook.accountkit.ui.AccountKitActivity" />
@@ -51,9 +58,8 @@
         </activity>
         <activity android:name=".Medical_Resourse_SearchActivity" />
 
-
-
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -64,19 +70,23 @@
 
 
 
+        <activity android:name=".RegisterAndLoginActivity"/>
+
+
+
+
+
+
+
+        <activity android:name=".HomeActivity"/>
+
 
 
 
         <activity android:name=".Register1Activity"/>
-
-
-
-
+        <activity android:name=".ProfileActivity"/>
 
         <activity android:name=".LoginActivity" />
-
-
-
         <activity android:name=".ProductInformationActivity" />
         <activity android:name=".ProductsList" />
         <activity android:name=".DiscussActivity" />
@@ -86,16 +96,13 @@
         <activity android:name=".FavoriteActivity" />
         <activity android:name=".TransportationActivity" />
         <activity android:name=".ArticleActivity" />
-
-        <activity android:name=".MapActivity" />
+        <activity android:name=".PostPageActivity" />
+        <activity android:name=".MapsActivity" />
+        <activity android:name=".GoogleMapBtn" />
         <activity android:name=".Activity_First1" />
-
-
-
-
-
-
-
+        <activity android:name=".ReservationActivity" />
+        <activity android:name=".ReservationConfirmedList" />
+        <activity android:name=".ReservationConfirmedActivity" />
 
 
 

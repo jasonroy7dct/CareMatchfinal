@@ -24,7 +24,6 @@ import java.util.List;
 public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapter.ViewHolder> {
 
     private ProductsListAdapter.transPageListener mTransPageListener;//adapter跳轉fragment
-
     private static final String TAG = "TEST";
     public List<Products> ProductsList;
     public Context context;

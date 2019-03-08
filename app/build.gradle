@@ -46,7 +46,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     // firebase
-    implementation 'com.google.firebase:firebase-database:16.0.6'
     //firebase core
     implementation 'com.google.firebase:firebase-core:16.0.7'
     //firebase Auth
@@ -56,7 +55,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:18.0.1'
     implementation 'com.github.bumptech.glide:glide:3.8.0'
     implementation 'com.google.firebase:firebase-database:16.0.6'
-
     //firebase storage
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
@@ -64,8 +62,6 @@ dependencies {
     implementation 'com.androidhuman.rxfirebase2:firebase-core:16.0.0.0'
     //google sign in
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    //
     implementation 'com.firebaseui:firebase-ui-storage:0.6.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     implementation 'com.android.support:support-vector-drawable:27.1.1'
@@ -76,10 +72,47 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
     implementation "com.google.android.gms:play-services-location:16.0.0"
-
     //facebook kit
     implementation 'com.facebook.android:account-kit-sdk:4.+'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    //shopcart
+    implementation 'com.android.support:exifinterface:27.0.2'
+//    implementation 'com.firebaseui:firebase-ui-firestore:3.0.0'
+    implementation 'com.google.firebase:firebase-messaging:11.4.2'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
+    implementation 'id.zelory:compressor:2.0.0'
+//    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.4+'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.stripe:stripe-android:1.0.4'
+    implementation 'tyrantgit:explosionfield:1.0.1'
+    implementation 'com.github.stfalcon:chatkit:0.2.2'
+    implementation 'com.androidadvance:topsnackbar:1.1.1'
+    implementation 'com.github.d-max:spots-dialog:0.7@aar'
+    implementation 'me.zhanghai.android.materialratingbar:library:1.2.0'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'gr.pantrif:easy-android-splash-screen:0.0.1'
+    implementation 'com.ss.bannerslider:bannerslider:1.8.0'
+    implementation 'com.shawnlin:number-picker:2.4.6'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.8'
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+    implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation('com.squareup.picasso:picasso:3.0.0-SNAPSHOT') {
+        exclude group: 'com.android.support'
+    }
+    implementation 'com.github.florent37:expansionpanel:1.0.7'
+    implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
 
 

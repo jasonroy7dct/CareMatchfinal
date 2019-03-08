@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
 
      <item
-         android:id="@+id/nav_home"
+         android:id="@+id/home"
          android:icon="@drawable/ic_home_black_24dp"
-         android:title="主頁"/>
+         android:title=""
+         app:showAsAction="always|withText"/>
      <item
-         android:id="@+id/nav_book"
+         android:id="@+id/book"
          android:icon="@drawable/ic_library_books_black_24dp"
-         android:title="我的預約"/>
+         android:title=""
+         app:showAsAction="always|withText"/>
      <item
-         android:id="@+id/nav_favorites"
+         android:id="@+id/favorites"
          android:icon="@drawable/ic_favorite_black_24dp"
-         android:title="我的收藏"/>
+          app:showAsAction="always|withText"/>
 
      <item
-         android:id="@+id/nav_profile"
+         android:id="@+id/profile"
          android:icon="@drawable/ic_person_black_24dp"
-         android:title="我的專區"/>
+         android:title=""
+         app:showAsAction="always|withText"/>
+
 
 </menu>

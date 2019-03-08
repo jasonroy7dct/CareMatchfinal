@@ -1,12 +1,14 @@
 package com.example.user.carematch;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.user.carematch.adapters.SectionsAdapter;
 
 public class RegisterAndLoginActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
 
@@ -14,11 +16,19 @@ public class RegisterAndLoginActivity extends AppCompatActivity implements ViewP
     private SectionsAdapter sectionsAdapter;
     private View loginIndicator,registerIndicator;
     private TextView title;
+    ActionBar actionBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_and_login);
+
+        actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
+        actionBar.setCustomView(R.layout.actionbar_normal);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         viewPager = findViewById(R.id.viewPager);
         sectionsAdapter = new SectionsAdapter(getSupportFragmentManager());

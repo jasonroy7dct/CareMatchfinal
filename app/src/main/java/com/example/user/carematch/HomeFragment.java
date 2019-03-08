@@ -6,19 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
 public class HomeFragment extends android.support.v4.app.Fragment {
@@ -27,7 +21,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     private ImageButton imageButton_booking;
     private ImageButton imageButton_medical;
     private ImageButton imageButton_trans;
-    private ImageButton imageButton_discuss;
+    private ImageButton imageButton_post;
     private ImageButton imageButton_read;
 
     public Context context;
@@ -42,6 +36,10 @@ public class HomeFragment extends android.support.v4.app.Fragment {
     //打開預約booking
     private Button testbutton;
 
+
+    public HomeFragment(){
+
+    }
 
     @Nullable
     @Override
@@ -64,7 +62,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frahome, new Fragment_Booking())
+                fragmentTransaction.replace(R.id.framelayout, new Fragment_Booking())
                         .addToBackStack(null)
                         .commit();
             }
@@ -77,12 +75,12 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
                     fragmentManager = getFragmentManager();
                     fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.frahome, new Fragment_Transportation())
+                    fragmentTransaction.replace(R.id.framelayout, new Fragment_Transportation())
                             .addToBackStack(null)
                             .commit();
                 }
         });
-        //醫療這夜先不能點，因為裡面還沒做好
+        //醫療
         imageButton_medical=(ImageButton) homefragmentview.findViewById(R.id.imageButton_medical);
         imageButton_medical.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +88,21 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frahome, new MedicalResourceSearchFragment())
+                fragmentTransaction.replace(R.id.framelayout, new ProductsSearchFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        //連接到Post
+        imageButton_post=(ImageButton) homefragmentview.findViewById(R.id.imageButton_post);
+        imageButton_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.framelayout, new PostSearchFragment())
                         .addToBackStack(null)
                         .commit();
             }
@@ -113,15 +125,15 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
 
+        imageButton_read=(ImageButton) homefragmentview.findViewById(R.id.imageButton_read);
+        imageButton_read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View d) {
 
-//        imageButton_discuss.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View d) {
-//
-//                openDiscussActivity();
-//
-//            }
-//        });
+                openProfileActivity();
+
+            }
+        });
 //
 //        imageButton_medical.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -153,10 +165,10 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
 
-//    public void openDiscussActivity(){
-//        Intent intent = new Intent(HomeFragment.this.getActivity(),TestFragment.class);
-//        startActivity(intent);
-//    }
+    public void openProfileActivity(){
+        Intent intent = new Intent(HomeFragment.this.getActivity(),ProfileActivity.class);
+        startActivity(intent);
+    }
 //    public void openMedicalResourseSearchActivity(){
 //        Intent intent = new Intent(HomeFragment.this.getActivity(),Medical_Resourse_SearchActivity.class);
 //        startActivity(intent);

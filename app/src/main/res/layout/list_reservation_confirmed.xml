@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="6dp"
+    app:cardCornerRadius="12dp"
+    android:layout_margin="12dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/reservation_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/logo_transparent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/reservation_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="交通"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="預約者"
+                android:textSize="22sp" />
+
+
+            <TextView
+                android:id="@+id/reservation_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="預約日期"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/reservation_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="預約時間"
+                android:textSize="22sp"
+                />
+
+            <TextView
+                android:id="@+id/reservation_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="預約細節"
+                android:textSize="22sp" />
+
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
