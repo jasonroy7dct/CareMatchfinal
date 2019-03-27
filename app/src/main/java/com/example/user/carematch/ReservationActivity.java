@@ -19,7 +19,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,7 +57,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class ReservationActivity extends AppCompatActivity {
+import static android.app.Activity.RESULT_OK;
+
+public class ReservationActivity extends android.support.v4.app.Fragment {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
@@ -143,48 +147,50 @@ public class ReservationActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_booking);
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_booking);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View ResView = inflater.inflate(R.layout.activity_booking, container, false);
 
 
-        actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
-        actionBar.setCustomView(R.layout.actionbar_normal);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
 
-
-        context = this;
+        context = this.getActivity();
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
 
         //spinner_trans
-        spinner_leave_class = (Spinner) findViewById(R.id.spinner_leave_class);
+        spinner_leave_class = (Spinner) ResView.findViewById(R.id.spinner_leave_class);
         //text_reservation_date
-        text_leave_date = (TextView) findViewById(R.id.text_leave_date);
+        text_leave_date = (TextView) ResView.findViewById(R.id.text_leave_date);
 
-        btn_leave_date = (Button) findViewById(R.id.btn_leave_date);
+        btn_leave_date = (Button) ResView.findViewById(R.id.btn_leave_date);
 
 
         //交通預約
 
-        uid=findViewById(R.id.uid);
-        name = findViewById(R.id.profile_name);
+//        uid=ResView.findViewById(R.id.uid);
+        name = ResView.findViewById(R.id.profile_name);
 
 
 
-        spinner_trans = (Spinner) findViewById(R.id.spinner_trans);
-        text_reservation_date = (TextView) findViewById(R.id.booking_date);
-        text_reservation_time = (TextView) findViewById(R.id.choose_time);
+        spinner_trans = (Spinner) ResView.findViewById(R.id.spinner_trans);
+        text_reservation_date = (TextView) ResView.findViewById(R.id.booking_date);
+        text_reservation_time = (TextView) ResView.findViewById(R.id.choose_time);
 
 
 
-        button_search = (Button) findViewById(R.id.Button_search);
-        button_cancel = (Button) findViewById(R.id.Button_cancel);
+        button_search = (Button) ResView.findViewById(R.id.Button_search);
+        button_cancel = (Button) ResView.findViewById(R.id.Button_cancel);
+
+
+        text_reservation_time = ResView.findViewById(R.id.choose_time);
+
 
 
 //        ArrayAdapter<CharSequence> leave_reasonList = ArrayAdapter.createFromResource(this,
@@ -210,7 +216,7 @@ public class ReservationActivity extends AppCompatActivity {
 
 
         //設定交通預約Adapter
-        ArrayAdapter<String> dataAdapter_trans = new ArrayAdapter<>(this,
+        ArrayAdapter<String> dataAdapter_trans = new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, transList);
         spinner_trans.setAdapter(dataAdapter_trans);
         //attaching data adapter to spinner
@@ -310,21 +316,24 @@ public class ReservationActivity extends AppCompatActivity {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                getActivity().finish();
             }
         });
 
+        return ResView;
     }
+
+
 
     //OK
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
                 reservation_photo.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -340,13 +349,13 @@ public class ReservationActivity extends AppCompatActivity {
 
         if (auth.getCurrentUser() != null) {
             user.collection("users").document(auth.getCurrentUser().getUid())
-                    .addSnapshotListener(ReservationActivity.this, new EventListener<DocumentSnapshot>() {
+                    .addSnapshotListener(ReservationActivity.this.getActivity(), new EventListener<DocumentSnapshot>() {
 
                                 @Override
                                 public void onEvent(DocumentSnapshot documentSnapshot, final FirebaseFirestoreException e) {
                                     if(documentSnapshot.exists()) {
                                         final User user = documentSnapshot.toObject(User.class);
-                                        name.setText(String.format("%s %s", user.getName(), user.getSurname()));
+                                        name.setText(String.format("%s %s", user.getUsername(), user.getOldname()));
                                         uid.setText(auth.getCurrentUser().getUid());
 
 
@@ -360,7 +369,7 @@ public class ReservationActivity extends AppCompatActivity {
 
     //進入預約清單頁面
     public void openReservationConfirmedList(){
-        Intent intent = new Intent(ReservationActivity.this,ReservationConfirmedActivity.class);
+        Intent intent = new Intent(ReservationActivity.this.getActivity(),ReservationConfirmedActivity.class);
         startActivity(intent);
     }
 
@@ -408,7 +417,7 @@ public class ReservationActivity extends AppCompatActivity {
     public void timePicker(View v){
 
         //選擇開始時間
-        text_reservation_time = findViewById(R.id.choose_time);
+//        text_reservation_time = ResView.findViewById(R.id.choose_time);
 
 
         //加上上面的calender
@@ -574,8 +583,8 @@ public class ReservationActivity extends AppCompatActivity {
 
         db.collection("Reservation").add(reservation);
 
-        Toast.makeText(this, "已送出", Toast.LENGTH_SHORT).show();
-        finish();
+        Toast.makeText(this.getActivity(), "已送出", Toast.LENGTH_SHORT).show();
+        getActivity().finish();
 
     }
 

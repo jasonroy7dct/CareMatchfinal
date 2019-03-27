@@ -51,6 +51,8 @@ public class ProductInformationActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();//取得傳遞過來的資料
         String productsId = intent.getStringExtra("ProductsId");
+        final String x = intent.getStringExtra("lat");
+        final String y = intent.getStringExtra("lon");
         productsName=(TextView)findViewById(R.id.products_name);
         productsStorename=(TextView)findViewById(R.id.products_storename);
         productsTitle=(TextView) findViewById(R.id.products_title);
@@ -62,7 +64,9 @@ public class ProductInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("s",storename);
-                Intent intent = new Intent(ProductInformationActivity.this, ArticleActivity.class);
+                bundle.putString("lat", x);
+                bundle.putString("lon", y);
+                Intent intent = new Intent(ProductInformationActivity.this, StorePage.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

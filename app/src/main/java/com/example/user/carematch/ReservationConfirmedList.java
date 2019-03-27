@@ -48,7 +48,7 @@ public class ReservationConfirmedList extends AppCompatActivity {
         mMainList.setLayoutManager(new LinearLayoutManager(this));
         mMainList.setAdapter(ReservationConfirmedListAdapter);
 
-        db.collection("ReservationConfirmed").orderBy("ReservationConfirmedList_title").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection("ReservationConfirmed").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if (e != null) {

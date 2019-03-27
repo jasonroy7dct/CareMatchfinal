@@ -3,6 +3,8 @@ package com.example.user.carematch;
 public class MyBook extends MyBookId {
 
     private String MyBook_name;
+    private String Username;
+
     private String MyBook_image;
     private String MyBook_time;
     private String MyBook_care;
@@ -13,8 +15,9 @@ public class MyBook extends MyBookId {
     public MyBook() {
     }
 
-        public MyBook(String myBook_name, String myBook_image, String myBook_time, String myBook_care, String myBook_details){
+        public MyBook(String Username,String myBook_name, String myBook_image, String myBook_time, String myBook_care, String myBook_details){
             MyBook_name=myBook_name;
+            Username = Username;
             MyBook_image=myBook_image;
             MyBook_time=myBook_time;
             MyBook_care=myBook_care;
@@ -28,6 +31,15 @@ public class MyBook extends MyBookId {
         public void setMyBook_name(String myBook_name) {
             MyBook_name=myBook_name;
         }
+
+    public String getUserName() {
+        return Username;
+    }
+
+    public void setUserName(String Username) {
+        this.Username = Username;
+    }
+
         public String getMyBook_image() {
             return MyBook_image;
         }

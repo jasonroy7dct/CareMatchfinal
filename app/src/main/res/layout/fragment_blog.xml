@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BlogFragment">
+
+
+    <!--<Button-->
+        <!--android:id="@+id/test"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="@drawable/button_style"-->
+        <!--android:text="發布文章" />-->
+
+
+    <ImageButton
+        android:id="@+id/test"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/add"
+        android:scaleType="centerCrop"
+        android:background="@color/transparent"
+        android:text="發布文章"
+        />
+
+    <!--<TextView-->
+        <!--android:id="@+id/title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:textSize="25sp"-->
+        <!--android:text="細心討論區" />-->
+
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/test"
+            android:id="@+id/blog_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="50dp"
+            tools:ignore="MissingConstraints" />
+
+</RelativeLayout>

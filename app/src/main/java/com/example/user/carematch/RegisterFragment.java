@@ -37,7 +37,7 @@ public class RegisterFragment extends Fragment {
 
 
     //edit text
-    private EditText surname,name,password,email,address,phoneNumber;
+    private EditText username,oldname,email,password,phone,address;
     private Button register;
 
     public RegisterFragment() {
@@ -50,12 +50,13 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         view =inflater.inflate(R.layout.fragment_register, container, false);
 
-        surname = view.findViewById(R.id.tv_surname);
-        name = view.findViewById(R.id.tv_name);
+        username = view.findViewById(R.id.username);
+        oldname = view.findViewById(R.id.oldname);
+        email = view.findViewById(R.id.email);
+        phone = view.findViewById(R.id.phone);
         password = view.findViewById(R.id.tv_password);
-        email = view.findViewById(R.id.tv_email);
-        address = view.findViewById(R.id.tv_address);
-        phoneNumber = view.findViewById(R.id.tv_phone_number);
+        address = view.findViewById(R.id.address);
+
         register = view.findViewById(R.id.registerBtn);
         database = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -72,17 +73,18 @@ public class RegisterFragment extends Fragment {
 
 
     public void validator(){
-        String sEmail,sPassword,sName,sSurname,sAddress,sPhoneNumber;
+        String sEmail,sPassword,sUsername,sOldname,sAddress,sPhone;
 
+        sUsername = username.getText().toString();
+        sOldname = oldname.getText().toString();
         sEmail = email.getText().toString();
-        sAddress = address.getText().toString();
-        sName = name.getText().toString();
-        sPhoneNumber = phoneNumber.getText().toString();
-        sSurname = surname.getText().toString();
+        sPhone = phone.getText().toString();
         sPassword = password.getText().toString();
+        sAddress = address.getText().toString();
 
-        if(TextUtils.isEmpty(sEmail) || TextUtils.isEmpty(sPhoneNumber) || TextUtils.isEmpty(sPassword)
-                ||TextUtils.isEmpty(sAddress) || TextUtils.isEmpty(sSurname) ||TextUtils.isEmpty(sName))
+
+        if(TextUtils.isEmpty(sEmail) || TextUtils.isEmpty(sPhone) || TextUtils.isEmpty(sPassword)
+                ||TextUtils.isEmpty(sAddress) || TextUtils.isEmpty(sOldname) ||TextUtils.isEmpty(sUsername))
         {
             TSnackbar snackbar = TSnackbar.make(view.findViewById(R.id.content),R.string.error, 5000);
             snackbar.setActionTextColor(Color.WHITE);
@@ -101,13 +103,13 @@ public class RegisterFragment extends Fragment {
                 textView.setTextColor(Color.WHITE);
                 snackbar.show();
             }else {
-               register(sName,sEmail,sPassword,sAddress,sSurname,sPhoneNumber);
+               register(sUsername,sEmail,sPassword,sAddress,sOldname,sPhone);
             }
         }
     }
 
 
-    public void register(final String nm , String em, String pass , final String ad , final String sur , final String ph){
+    public void register(final String nm , final String em, String pass , final String ad , final String old , final String ph){
 
         final AlertDialog dialog = new SpotsDialog(getContext(),R.style.Custom);
         dialog.setCanceledOnTouchOutside(false);
@@ -117,7 +119,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onSuccess(AuthResult authResult) {
                 String token = FirebaseInstanceId.getInstance().getToken();
-                User user = new User(nm,ad,ph,sur,token,"Silver","default","default");
+                final User user = new User(nm,ad,ph,old,em,token,"Silver","default","default");
                 database.collection("users").document(authResult.getUser().getUid())
                         .set(user).addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
                     @Override
@@ -136,9 +138,9 @@ public class RegisterFragment extends Fragment {
                             auth.signOut();
                             email.setText("");
                             password.setText("");
-                            phoneNumber.setText("");
-                            surname.setText("");
-                            name.setText("");
+                            phone.setText("");
+                            oldname.setText("");
+                            username.setText("");
                             address.setText("");
                         }
                     }

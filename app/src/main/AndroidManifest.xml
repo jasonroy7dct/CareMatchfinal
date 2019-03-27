@@ -3,9 +3,18 @@
     package="com.example.user.carematch">
 
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +27,11 @@
 
 
 
+        <service android:name=".Service.MyfirebaseInstanceService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
 
         <meta-data
@@ -37,8 +51,8 @@
 
 
         <!--<meta-data-->
-            <!--android:name="com.facebook.sdk.ApplicationId"-->
-            <!--android:value="@string/facebook_app_id" />-->
+        <!--android:name="com.facebook.sdk.ApplicationId"-->
+        <!--android:value="@string/facebook_app_id" />-->
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -78,31 +92,46 @@
 
 
 
-        <activity android:name=".HomeActivity"/>
-
 
 
 
         <activity android:name=".Register1Activity"/>
-        <activity android:name=".ProfileActivity"/>
+
+
+
+
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProductInformationActivity" />
-        <activity android:name=".ProductsList" />
-        <activity android:name=".DiscussActivity" />
         <activity android:name=".mybookActivity" />
         <activity android:name=".BookingActivity" />
         <activity android:name=".MyBookInformationActivity" />
-        <activity android:name=".FavoriteActivity" />
         <activity android:name=".TransportationActivity" />
         <activity android:name=".ArticleActivity" />
         <activity android:name=".PostPageActivity" />
-        <activity android:name=".MapsActivity" />
         <activity android:name=".GoogleMapBtn" />
         <activity android:name=".Activity_First1" />
-        <activity android:name=".ReservationActivity" />
         <activity android:name=".ReservationConfirmedList" />
         <activity android:name=".ReservationConfirmedActivity" />
+        <activity android:name=".newPost.PostActivity" />
+
+        <activity android:name=".HumanPage" />
+        <activity android:name=".AddHumanReview" />
+
+
+
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".comment.CommentsActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".StoreList" />
+
+        <activity android:name=".StorePage" />
+        <activity android:name=".StoreActivity" />
+
+
+
 
 
 
@@ -111,3 +140,4 @@
     </application>
 
 </manifest>
+

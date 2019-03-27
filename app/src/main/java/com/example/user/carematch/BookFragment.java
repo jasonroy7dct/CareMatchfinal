@@ -80,7 +80,7 @@ public class BookFragment extends android.support.v4.app.Fragment {
         mMainList = (RecyclerView) BookFragmentview.findViewById(R.id.MyBook_list);
         mMainList.setHasFixedSize(true);
 //        mMainList.setLayoutManager(new LinearLayoutManager(this));
-        mMainList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mMainList.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         mMainList.setAdapter(MyBookListAdapter);
 
         db.collection("MyBook").addSnapshotListener(new EventListener<QuerySnapshot>() {

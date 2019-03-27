@@ -115,7 +115,7 @@ public class Utils {
                 if(documentSnapshot != null) {
                     if(documentSnapshot.exists()){
                         User user = documentSnapshot.toObject(User.class);
-                        name.setText(String.format("%s %s", user.getName(), user.getSurname()));
+                        name.setText(String.format("%s %s", user.getUsername(), user.getOldname()));
                         status.setText(user.getMembership());
 
                         if(!user.getThumb_image().equals("default")){

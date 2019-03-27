@@ -16,9 +16,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements
         BottomNavigationView.OnNavigationItemSelectedListener{
@@ -52,9 +55,15 @@ public class MainActivity extends AppCompatActivity implements
     private BookFragment bookFragment;
     private FavoriteFragment favoriteFragment;
     private ProfileFragment profileFragment;
-    private MapsActivity mapsActivity;
+    private MapsFragment mapsFragment;
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore user;
+    FirebaseFirestore firebaseFirestore;
+
+    String current_user_id;
+
+
 
 
 
@@ -76,28 +85,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-//        final LayoutInflater inflater =(LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        assert inflater != null;
-//        View action_bar_view = inflater.inflate(R.layout.custom_tool ,null);
-//        assert actionBar != null;
-//        actionBar.setCustomView(action_bar_view);
-//
-//        toolbarTitle = action_bar_view.findViewById(R.id.toolbarTitle);
-
-//        ImageView drawerToggle = action_bar_view.findViewById(R.id.drawerToggle);
-//        cart = action_bar_view.findViewById(R.id.toolbar_cart);
-//        cart.setVisibility(View.INVISIBLE);
-//        cart.setClickable(false);
-//        TextView tv = action_bar_view.findViewById(R.id.tv_number_of_products);
-//        tv.setVisibility(View.INVISIBLE);
-
-//        drawerToggle.setImageResource(R.drawable.ic_action_back);
-//        drawerToggle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
 
         bottomNavigationView = findViewById(R.id.bottom_nav_bar);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
@@ -107,74 +94,52 @@ public class MainActivity extends AppCompatActivity implements
         bookFragment = new BookFragment();
         favoriteFragment = new FavoriteFragment();
         profileFragment = new ProfileFragment();
-        mapsActivity = new MapsActivity();
+        mapsFragment = new MapsFragment();
 
         mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
 
 
-
-//        viewPager = (ViewPager) findViewById(R.id.mainviewPager);
-//        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        //Tab註冊Listener
-//        viewPager.addOnPageChangeListener(this);
-//        tabLayout.addOnTabSelectedListener(this);
-
-        //將Fragment匯入到viewPager
-//        mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
-//        viewPager.setAdapter(mPagerAdapter);
-
-//        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-//            @Override
-//            public Fragment getItem(int position) {
-//                switch (position) {
-//                    case 0:
-//                        return homeFragment;
-//                    case 1:
-//                        return bookFragment;
-//                    case 2:
-//                        return favoriteFragment;
-//                    case 3:
-//                        return profileFragment;
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            public int getCount() {
-//                return 4;
-//            }
-//        });
-
+        //預設
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.framelayout, new HomeFragment())
+                .commit();
     }
 
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Intent i = getIntent();
-//        if (i != null) {
-//            String string = i.getStringExtra("fromWhere");
-//            if (string != null) {
-//                if (string.equals("fromProfile")) {
-//                    setfragment(profileFragment);
-//                    bottomNavigationView.setSelectedItemId(R.id.profile);
-//                } else if (string.equals("fromBook")) {
-//                    setfragment(bookFragment);
-//                    bottomNavigationView.setSelectedItemId(R.id.book);
-//                } else if (string.equals("fromFavorite")) {
-//                    setfragment(favoriteFragment);
-//                    bottomNavigationView.setSelectedItemId(R.id.favorite);
-//                }
-//            }
-//        }
-//    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent i = getIntent();
+        if (i != null) {
+            String string = i.getStringExtra("fromWhere");
+            if (string != null) {
+                if (string.equals("fromProfile")) {
+                    setfragment(profileFragment);
+                    bottomNavigationView.setSelectedItemId(R.id.profile);
+                } else if (string.equals("fromBook")) {
+                    setfragment(bookFragment);
+                    bottomNavigationView.setSelectedItemId(R.id.book);
+                } else if (string.equals("fromFavorite")) {
+                    setfragment(favoriteFragment);
+                    bottomNavigationView.setSelectedItemId(R.id.favorite);
+                }
+                else if (string.equals("fromHome")) {
+                    setfragment(homeFragment);
+                    bottomNavigationView.setSelectedItemId(R.id.home);
+                }
+            }
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
+
 
         switch (item.getItemId()) {
-            case R.id.favorite: {
+            case R.id.favorites: {
                 setfragment(favoriteFragment);
                 return true;
             }
@@ -189,32 +154,42 @@ public class MainActivity extends AppCompatActivity implements
             }
             case R.id.book: {
                 setfragment(bookFragment);
-
                 return true;
             }
+
             default:
-                return false;
+                setfragment(homeFragment);
+                return true;
         }
     }
 
 
     public void setfragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.framelayout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.framelayout, fragment)
+                .commit();
     }
 
-//    private FragmentManager getChildFragmentManager() {
-//        return getChildFragmentManager;
-//    }
+
 //
+//    public void setfragment(Fragment fragment) {
+//
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.framelayout, fragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Utils.uploadImage(data,requestCode,resultCode,MainActivity.this,mAuth,null);
-    }
+
+
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Utils.uploadImage(data,requestCode,resultCode,MainActivity.this,mAuth,null);
+//    }
+
 
 
 
@@ -286,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_maps:
 //                startActivity(new Intent(MainActivity.this, MapssActivity.class));
 
-                   setfragment(mapsActivity);
+                   setfragment(mapsFragment);
                    return true;
             case R.id.action_settings:
 //                startActivity(new Intent(MainActivity.this, SetUpActivity.class));
@@ -303,7 +278,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-
+    public FragmentManager getChildFragmentManager() {
+        return childFragmentManager;
+    }
 }
 
 

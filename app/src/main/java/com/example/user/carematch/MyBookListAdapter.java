@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -33,6 +35,8 @@ public class MyBookListAdapter extends RecyclerView.Adapter<MyBookListAdapter.Vi
     public Context context;
 
 
+    private FirebaseAuth auth;
+    private FirebaseFirestore user;
 
 
 
@@ -50,6 +54,17 @@ public class MyBookListAdapter extends RecyclerView.Adapter<MyBookListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
+        auth = FirebaseAuth.getInstance();
+        user = FirebaseFirestore.getInstance();
+
+        user.collection("users").document(auth.getCurrentUser().getUid());
+
+
+
+//        holder.myBookName.setText(String.format("%s %s", user.getName(), user.getSurname()));
+
+
 
         holder.myBookName.setText(MyBookList.get(position).getMyBook_name());
         holder.myBookTime.setText(MyBookList.get(position).getMyBook_time());

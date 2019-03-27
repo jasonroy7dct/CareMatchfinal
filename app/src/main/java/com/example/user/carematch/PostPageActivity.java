@@ -3,31 +3,45 @@ package com.example.user.carematch;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostPageActivity extends AppCompatActivity {
-    private static final String TAG ="FireLog";
+    private static final String TAG = "FireLog";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
     private RecyclerView mMainList;
     private PostListAdapter PostListAdapter;
     private List<Post> PostList;
@@ -36,6 +50,7 @@ public class PostPageActivity extends AppCompatActivity {
     public TextView postThumb;
     public TextView postDate;
     public ImageView postImage;
+
 
     ActionBar actionBar;
 
@@ -53,39 +68,43 @@ public class PostPageActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();//取得傳遞過來的資料
         String postId = intent.getStringExtra("PostId");
-        postTitle=(TextView)findViewById(R.id.post_title);
-        postDesc=(TextView)findViewById(R.id.post_desc);
-        postDate=(TextView)findViewById(R.id.post_date);
-        postThumb=(TextView) findViewById(R.id.post_like_count);
-        postImage=(ImageView) findViewById(R.id.post_image);
-        Task<DocumentSnapshot> documentSnapshotTask = db.collection("Post").document(postId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        postTitle.setText(document.get("Post_title").toString());
-                        postDesc.setText(document.get("Post_desc").toString());
-                        postDate.setText(document.get("Post_date").toString());
-                        postThumb.setText(document.get("Post_thumbs").toString());
-                        String image = document.get("Post_image").toString();
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                        StorageReference picReference = storageReference.child("Post/"+image);
-
-                        Glide.with(postImage.getContext())
-                                .using(new FirebaseImageLoader())
-                                .load(picReference)
-                                .into(postImage);
+        postTitle = (TextView) findViewById(R.id.post_title);
+        postDesc = (TextView) findViewById(R.id.post_desc);
+        postDate = (TextView) findViewById(R.id.post_date);
+        postThumb = (TextView) findViewById(R.id.post_like_count);
+        postImage = (ImageView) findViewById(R.id.post_image);
 
 
-                    } else {
-                        Log.d(TAG, "No such document");
+        Task<DocumentSnapshot> documentSnapshotTask = db.collection("Post")
+                .document(postId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                postTitle.setText(document.get("Post_title").toString());
+                                postDesc.setText(document.get("Post_desc").toString());
+                                postDate.setText(document.get("Post_date").toString());
+                                postThumb.setText(document.get("Post_thumbs").toString());
+                                String image = document.get("Post_image").toString();
+                                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                                StorageReference picReference = storageReference.child("Post/" + image);
+
+                                Glide.with(postImage.getContext())
+                                        .using(new FirebaseImageLoader())
+                                        .load(picReference)
+                                        .into(postImage);
+
+
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
+                });
+
 
     }
 }

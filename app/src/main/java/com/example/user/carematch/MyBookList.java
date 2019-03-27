@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +32,11 @@ public class MyBookList extends android.support.v4.app.Fragment {
     private RecyclerView mMainList;
     private MyBookListAdapter MyBookListAdapter;
     private List<MyBook> MyBookList;
+
+    private FirebaseAuth auth;
+    private FirebaseFirestore user;
+
+
 
 
     @Nullable
@@ -53,9 +59,15 @@ public class MyBookList extends android.support.v4.app.Fragment {
         mMainList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMainList.setAdapter(MyBookListAdapter);
 
+
+        auth = FirebaseAuth.getInstance();
+        user = FirebaseFirestore.getInstance();
+
+
         db.collection("MyBook").orderBy("MyBook_name").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
                 if (e != null) {
 
                     Log.d(TAG, "Error :" + e.getMessage());

@@ -1,32 +1,74 @@
 package com.example.user.carematch;
 
 
-/**
- * Created by John on 26/1/2018.
- */
+
 
 public class User {
 
-    private String name;
-    private String surname;
+    private String username;
+    private String oldname;
+    private String email;
+    private String phone;
     private String address;
-    private String phoneNumber;
+
     private String deviceToken;
     private String membership;
     private String image;
     private String thumb_image;
 
-    public User(String name, String address, String phoneNumber , String surname , String deviceToken , String membership, String image, String thumb_image) {
-        this.name = name;
+    public User(String username, String oldname , String email, String phone , String address ,String deviceToken , String membership, String image, String thumb_image) {
+        this.username = username;
+        this.oldname = oldname;
+        this.email = email;
+        this.phone = phone;
         this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.surname = surname;
+
         this.deviceToken = deviceToken;
         this.membership = membership;
         this.image = image;
         this.thumb_image = thumb_image;
     }
 
+
+
+    public String getOldname() {
+        return oldname;
+    }
+
+    public void setOldname(String oldname) {
+        this.oldname = oldname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
     public String getImage() {
         return image;
     }
@@ -62,35 +104,5 @@ public class User {
         this.deviceToken = deviceToken;
     }
 
-    public String getSurname() {
-        return surname;
-    }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 }

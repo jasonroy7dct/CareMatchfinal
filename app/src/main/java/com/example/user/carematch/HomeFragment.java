@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.example.user.carematch.newPost.PostActivity;
+
 
 public class HomeFragment extends android.support.v4.app.Fragment {
 
@@ -52,6 +54,7 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 //        imageButton_medical=  homefragment.findViewById(R.id.imageButton_medical);
 //        imageButton_trans = homefragment.findViewById(R.id.imageButton_trans);
 //        imageButton_read = homefragment.findViewById(R.id.imageButton_read);
+
 
 
         //打開預約booking
@@ -95,8 +98,8 @@ public class HomeFragment extends android.support.v4.app.Fragment {
         });
 
         //連接到Post
-        imageButton_post=(ImageButton) homefragmentview.findViewById(R.id.imageButton_post);
-        imageButton_post.setOnClickListener(new View.OnClickListener() {
+        imageButton_read=(ImageButton) homefragmentview.findViewById(R.id.imageButton_read);
+        imageButton_read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -107,6 +110,22 @@ public class HomeFragment extends android.support.v4.app.Fragment {
                         .commit();
             }
         });
+
+        //連接到Blog
+        imageButton_post=(ImageButton) homefragmentview.findViewById(R.id.imageButton_post);
+        imageButton_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.framelayout, new BlogFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+
 
 //        @Override
 //        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -125,15 +144,19 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
 
-        imageButton_read=(ImageButton) homefragmentview.findViewById(R.id.imageButton_read);
-        imageButton_read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View d) {
+//        imageButton_read=(ImageButton) homefragmentview.findViewById(R.id.imageButton_read);
+//        imageButton_read.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View d) {
+//
+//                openProfileActivity();
+//
+//            }
+//        });
 
-                openProfileActivity();
 
-            }
-        });
+
+
 //
 //        imageButton_medical.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -165,10 +188,14 @@ public class HomeFragment extends android.support.v4.app.Fragment {
 
 
 
-    public void openProfileActivity(){
-        Intent intent = new Intent(HomeFragment.this.getActivity(),ProfileActivity.class);
-        startActivity(intent);
-    }
+//    public void openProfileActivity(){
+//        Intent intent = new Intent(HomeFragment.this.getActivity(),PostActivity.class);
+//        startActivity(intent);
+//    }
+
+
+
+
 //    public void openMedicalResourseSearchActivity(){
 //        Intent intent = new Intent(HomeFragment.this.getActivity(),Medical_Resourse_SearchActivity.class);
 //        startActivity(intent);

@@ -53,6 +53,34 @@
     <string name="checkEmail">Verification Email Sent</string>
     <string name="login">Login</string>
 
+
+    <!-- Date Util -->
+    <string name="date_util_term_less">小於</string>
+    <string name="date_util_term_a">一</string>
+    <string name="date_util_term_an">一</string>
+
+    <string name="date_util_unit_second">秒</string>
+    <string name="date_util_unit_seconds">秒</string>
+    <string name="date_util_unit_minute">分鐘</string>
+    <string name="date_util_unit_minutes">分鐘</string>
+    <string name="date_util_unit_hour">小時</string>
+    <string name="date_util_unit_hours">小時</string>
+    <string name="date_util_unit_day">天</string>
+    <string name="date_util_unit_days">天</string>
+    <string name="date_util_unit_month">月</string>
+    <string name="date_util_unit_months">月</string>
+    <string name="date_util_unit_year">年</string>
+    <string name="date_util_unit_years">年</string>
+
+    <string name="date_util_prefix_lt">小於</string>
+    <string name="date_util_prefix_about">約</string>
+    <string name="date_util_prefix_over">超過</string>
+    <string name="date_util_prefix_almost">大約</string>
+
+    <string name="date_util_suffix">前</string>
+
+    <string name="update">更新</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
