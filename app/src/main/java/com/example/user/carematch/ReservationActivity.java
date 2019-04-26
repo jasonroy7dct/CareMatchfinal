@@ -1,33 +1,26 @@
 package com.example.user.carematch;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,27 +28,25 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -68,10 +59,14 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
 
     private FirebaseAuth auth;
     private FirebaseFirestore user;
+    private String final_date,final_time,comparedate;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
 
 
     private Reservation reservation = new Reservation();
+
     private String TAG = "LeaveApplications_FLAG";
 
     private String student_id = "405401217";
@@ -94,6 +89,7 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
     private ArrayList<String> classList;
     private ImageView img_leave_photo;
     private Context context;
+    private EditText edittext_place,edittext_place2;
 
     private final int PICK_IMAGE_REQUEST = 71;
 
@@ -108,19 +104,12 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
     private Spinner spinner_trans;
     private ArrayList<String> transList;
     private ArrayList<String> trans_idList;
-    private String user_name;
-    private String user_id;
     private String reservation_id;
     private static TextView textView_reverasation_content;
     private static TextView text_reservation_date;
     private static TextView text_reservation_time;
-
-
-    private TextView uid;
-    private TextView name;
-
-
-
+    private String user_id;
+    private String user_name;
     private Button button_search;
     private Button button_cancel;
     private static TextView booking_date;
@@ -139,121 +128,54 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
 
     Calendar calendar;
 
-
-
-
     //日期
     private TextView mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_booking);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View ResView = inflater.inflate(R.layout.activity_booking, container, false);
+        final View ResView = inflater.inflate(R.layout.activity_reservation, container, false);
 
 
 
         context = this.getActivity();
+        auth=FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        final FirebaseUser User = FirebaseAuth.getInstance().getCurrentUser();
+        if (User != null) {
+            // Name, email address, and profile photo Url
+            user_id = User.getUid();
 
+            Log.d(TAG, "userid" +user_id);
+        }
+        if ( auth.getCurrentUser()!= null) {
+            db.collection("users").document(user_id).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                user_name=task.getResult().getString("name");
+                            } else {
+                            }
+                        }
+                    });
+        }
 
-        //spinner_trans
-        spinner_leave_class = (Spinner) ResView.findViewById(R.id.spinner_leave_class);
-        //text_reservation_date
-        text_leave_date = (TextView) ResView.findViewById(R.id.text_leave_date);
+        edittext_place=(EditText)ResView.findViewById(R.id.booking_place);
+        edittext_place2=(EditText)ResView.findViewById(R.id.booking_place2);
 
-        btn_leave_date = (Button) ResView.findViewById(R.id.btn_leave_date);
-
-
-        //交通預約
-
-//        uid=ResView.findViewById(R.id.uid);
-        name = ResView.findViewById(R.id.profile_name);
-
-
-
-        spinner_trans = (Spinner) ResView.findViewById(R.id.spinner_trans);
         text_reservation_date = (TextView) ResView.findViewById(R.id.booking_date);
         text_reservation_time = (TextView) ResView.findViewById(R.id.choose_time);
-
-
-
         button_search = (Button) ResView.findViewById(R.id.Button_search);
         button_cancel = (Button) ResView.findViewById(R.id.Button_cancel);
-
-
         text_reservation_time = ResView.findViewById(R.id.choose_time);
 
 
 
-//        ArrayAdapter<CharSequence> leave_reasonList = ArrayAdapter.createFromResource(this,
-//                R.array.leave_reason,
-//                android.R.layout.simple_spinner_dropdown_item);
-//        spinner_leave_reason.setAdapter(dataAdapter_trans);
-
-        trans_idList = new ArrayList<>();
-        transList = new ArrayList<>();
-        trans_idList.add("Null");
-
-
-
-        getTransList();
-//        transList.add(0,"請選擇您與家人需要的交通");
-        transList.add("復康巴士");
-        transList.add("無障礙計程車");
-
-//        List<String> transList = new ArrayList<>();
-//        transList.add(0,"請選擇您與家人需要的交通");
-//        transList.add("復康巴士");
-//        transList.add("無障礙計程車");
-
-
-        //設定交通預約Adapter
-        ArrayAdapter<String> dataAdapter_trans = new ArrayAdapter<>(this.getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, transList);
-        spinner_trans.setAdapter(dataAdapter_trans);
-        //attaching data adapter to spinner
-        spinner_trans.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-//                if(parent.getItemAtPosition(position).equals("請選擇您與家人需要的交通"))
-//                {
-//                    //不用做啥
-//                }
-//                else{
-
-                //需要改
-                setReservation_content(trans_idList.get(spinner_trans.getSelectedItemPosition()));
-            }
-                    //選擇一個item
-//                    String item = parent.getItemAtPosition(position).toString();
-
-                    //提示已經選擇的item
-//                    Toast.makeText(parent.getContext(),"您已選擇： "+item, Toast.LENGTH_SHORT).show();
-//                }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-
-
-        });
-
-
-
-        //dropdown layout style
-//        dataAdapter_trans.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
 
@@ -285,14 +207,6 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
 
         });
 
-//        btn_upload_leave_photo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                chooseImage();
-//            }
-//
-//        });
 
         Log.d(TAG, "Date:" + text_reservation_date.getText().toString());
 
@@ -301,12 +215,65 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
         button_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                sendEmail();
+                AlertDialog.Builder mBuider = new AlertDialog.Builder(getActivity());
+                mBuider.setTitle("乘車貴客:"+user_name);
+                mBuider.setIcon(R.drawable.logo);
+                mBuider.setMessage("更多服務規定請參閱「臺北市身心障礙者小型冷氣車乘客服務須知」");
+
+                mBuider.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    private DocumentSnapshot snapshot;
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        String place = edittext_place.getText().toString();
+                        String place2 = edittext_place2.getText().toString();
+
+                        Map<String, Object> uploadMap = new HashMap<>();
+                        uploadMap.put("Reservation_date", final_date);
+                        uploadMap.put("Reservation_time",final_time);
+                        uploadMap.put("Reservation_place",place);
+                        uploadMap.put("Reservation_place2",place2);
+                        uploadMap.put("User_id",user_id);
+                        uploadMap.put("User_name",user_name);
+//                        uploadMap.put("Com_date",comparedate);
+
+                        db.collection("Reservation").add(uploadMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(getActivity(),"預約成功！",Toast.LENGTH_SHORT).show();
+
+
+//                                Intent intent = new Intent();
+//                                intent.setClass(getApplicationContext(), ReservationList.class);
+//                                intent.putExtra("HumanId",user_id);
+//                                Log.d(TAG,"Id: "+user_id);
+//                                startActivity(intent);
+                                fragmentManager = getFragmentManager();
+                                fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.framelayout, new Fragment_Transportation())
+                                        .addToBackStack(null)
+                                        .commit();
+
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                String error = e.getMessage();
+                                Toast.makeText(getActivity(),"上傳失敗",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                    }
+                }).show();
 
                 //打開預約清單頁面
-                openReservationConfirmedList();
-                //取得預約資料
-//                book();
-//                Log.d(TAG, "reservation.getReservation_content onClick:" + reservation.getReservation_content());
+//                openReservationConfirmedList();
+
             }
         });
 
@@ -316,16 +283,12 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
             }
         });
 
         return ResView;
     }
 
-
-
-    //OK
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -342,40 +305,8 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
     }
 
 
-
-    //下訂單
-    private void book() {
-
-
-        if (auth.getCurrentUser() != null) {
-            user.collection("users").document(auth.getCurrentUser().getUid())
-                    .addSnapshotListener(ReservationActivity.this.getActivity(), new EventListener<DocumentSnapshot>() {
-
-                                @Override
-                                public void onEvent(DocumentSnapshot documentSnapshot, final FirebaseFirestoreException e) {
-                                    if(documentSnapshot.exists()) {
-                                        final User user = documentSnapshot.toObject(User.class);
-                                        name.setText(String.format("%s %s", user.getUsername(), user.getOldname()));
-                                        uid.setText(auth.getCurrentUser().getUid());
-
-
-
-                                    }
-                                }
-                    });
-        }
-
-    }
-
-    //進入預約清單頁面
-    public void openReservationConfirmedList(){
-        Intent intent = new Intent(ReservationActivity.this.getActivity(),ReservationConfirmedActivity.class);
-        startActivity(intent);
-    }
-
     //OK
     private void initDate() {
-
 
 
         Calendar calendar = Calendar.getInstance();
@@ -383,13 +314,16 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         String date = String.valueOf(year) + "/" + String.valueOf(month + 1) + "/" + String.valueOf(day);
+        String date1 = String.valueOf(year)  + String.valueOf(month + 1) +String.valueOf(day);
         text_reservation_date.setText(date);
+        final_date=text_reservation_date.getText().toString();
+        comparedate=date1;
 
     }
 
     //選擇日期
     //
-        public void datePicker (View v){
+    public void datePicker (View v){
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -398,12 +332,16 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
 
         new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
 
-
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 String date = String.valueOf(year) + "/" + String.valueOf(month + 1) + "/" + String.valueOf(day);
+                String date1 = String.valueOf(year)  + String.valueOf(month + 1) +String.valueOf(day);
+                Log.d("eeeee",date1);
                 text_reservation_date.setText(date);
-                Log.d(TAG, "Date inin:" + text_reservation_date.getText().toString());
+                final_date=text_reservation_date.getText().toString();
+                comparedate=date1;
+
+                Log.d(TAG, "Date inin:" +final_date);
             }
 
 
@@ -432,21 +370,22 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
             @Override
             public void onTimeSet(TimePicker view, int currentHour, int currentMinute) {
 
-                                if(currentHour>=12){
-                                    ampm = "PM";
-                                }else{
-                                    ampm = "AM";
-                                }
+                if(currentHour>=12){
+                    ampm = "PM";
+                }else{
+                    ampm = "AM";
+                }
 
                 String time = String.format("%02d:%02d",currentHour,currentMinute)+ ampm;
                 text_reservation_time.setText(time);
-
-                            }
-                        },currentHour,currentMinute,false).show();
-
-        Log.d(TAG, "Time in:" + text_reservation_time.getText().toString());
+                final_time=text_reservation_time.getText().toString();
+                Log.d(TAG, "Time in:" + text_reservation_time.getText().toString());
 
             }
+        },currentHour,currentMinute,false).show();
+
+
+    }
 
 
     //OK
@@ -475,169 +414,6 @@ public class ReservationActivity extends android.support.v4.app.Fragment {
 
     }
 
-
-    //OK
-    //設定訂單細節
-    private void setReservation_content(String reservation_id) {
-
-        db = FirebaseFirestore.getInstance();
-        db.collection("Reservation").whereEqualTo("reservation_id", reservation_id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                reservation_content = document.get("reservation_content").toString();
-                                reservation.setReservation_content(reservation_content);
-                                Log.d(TAG, "reservation.getReservation_content in get:" + reservation.getReservation_content());
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-    }
-
-    private void chooseImage() {
-
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "SelectPicture"), PICK_IMAGE_REQUEST);
-
-    }
-
-
-
-
-    //搜尋交通
-    private void apply() {
-
-
-
-        setUser_name();
-
-        //交通預約 改
-        setReservation_content(trans_idList.get(spinner_trans.getSelectedItemPosition()));
-
-        //訂單細節尚未用到
-//        final String reservation_content = textView_reverasation_content.getText().toString();
-        final String reservation_date = text_reservation_date.getText().toString();
-
-        //一個spinner
-        final String trans = spinner_trans.getSelectedItem().toString();
-
-        final String reservation_name = reservation.getReservation_name();
-        final String trans_id = trans_idList.get(spinner_trans.getSelectedItemPosition());
-        final String user_name = this.user_name;
-        final String user_id = this.user_id;
-        final String reservation_time = reservation.getReservation_time();
-        final String reservation_photoUrl = UUID.randomUUID().toString();
-        final Date reservation_uploaddate = new Date();
-
-
-        db = FirebaseFirestore.getInstance();
-
-
-        reservation.setReservation_uploaddate(reservation_uploaddate);
-        reservation.setUser_name(user_name);
-        reservation.setUser_id(user_id);
-        reservation.setTrans_id(trans_id);
-        reservation.setReservation_name(reservation_name);
-        reservation.setReservation_date(reservation_date);
-        reservation.setReservation_content(reservation_content);
-        reservation.setReservation_time(reservation_time);
-        reservation.setReservation_photoUrl(reservation_photoUrl);
-
-
-        Log.d(TAG, "reservation_photoUrl:" + reservation_photoUrl);
-        StorageReference ref = storageReference.child("Reservation_photo/" + reservation_photoUrl);
-        ref.putFile(filePath);
-//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        progressDialogs.dismiss();
-//                        Toast.makeText(LeaveApplications.this, "Uploaded", Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        progressDialogs.dismiss();
-//                        Toast.makeText(LeaveApplications.this, "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                        double prodress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-//                        progressDialogs.setMessage("Upload" + (int) prodress + "%");
-//                    }
-//                });
-
-        Log.d(TAG, "afterReservation_name" + reservation_name);
-        Log.d(TAG, "afterReservation_content:" + reservation_content);
-
-        db.collection("Reservation").add(reservation);
-
-        Toast.makeText(this.getActivity(), "已送出", Toast.LENGTH_SHORT).show();
-        getActivity().finish();
-
-    }
-
-
-
-    //OK
-    //get交通預約
-
-    private void getTransList() {
-        Query queryUser_id = db.collection("User").whereEqualTo("user_id", user_id);
-        queryUser_id.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()) {
-                    QuerySnapshot document = task.getResult();
-                    if (!document.isEmpty()) {
-                        trans_idList.addAll((ArrayList<String>) document.getDocuments().get(0).get("trans_id"));
-                        Log.d(TAG, "trans_id: " + trans_idList);
-                        for (final String trans_id : trans_idList) {
-                            db.collection("Reservation")
-                                    .whereEqualTo("trans_id", trans_id)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    transList.add(document.get("trans_name").toString());
-                                                    Log.d(TAG, "trans_id: " + trans_id);
-                                                    Log.d(TAG, "trans_name: " + transList);
-
-                                                }
-                                            } else {
-                                                Log.d(TAG, "Error getting documents: ", task.getException());
-                                            }
-                                        }
-                                    });
-                        }
-
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-
-            }
-
-
-        });
-
-    }
 
 
 

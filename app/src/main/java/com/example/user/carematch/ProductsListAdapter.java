@@ -87,8 +87,8 @@ public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapte
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        lat=Double.parseDouble(document.get("Latitude").toString());
-                        lon=Double.parseDouble(document.get("Longitude").toString());
+//                        lat=Double.parseDouble(document.get("Latitude").toString());
+//                        lon=Double.parseDouble(document.get("Longitude").toString());
 
 
                     } else {

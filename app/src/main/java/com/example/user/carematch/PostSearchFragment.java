@@ -55,41 +55,6 @@ public class PostSearchFragment extends android.support.v4.app.Fragment {
         setupViewPager(firstViewPager);
 
 
-//        PostList = new ArrayList<>();
-//        PostListAdapter = new PostListAdapter(getApplicationContext(),PostList);
-//        //取得RecylerView物件，設定佈局及adapter
-//        mMainList = (RecyclerView) PostListview.findViewById(R.id.post_list);
-//        mMainList.setHasFixedSize(true);
-//        mMainList.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        mMainList.setAdapter(PostListAdapter);
-//
-//        db.collection("Post").orderBy("Post_title").addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-//                if (e != null) {
-//
-//                    Log.d(TAG, "Error :" + e.getMessage());
-//                } else {
-//                    for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-//
-//                        if (doc.getType() == DocumentChange.Type.ADDED) {
-//
-//                            String post_id = doc.getDocument().getId();
-//
-//                            Post post = doc.getDocument().toObject(Post.class).withId(post_id);//抓ID
-//                            PostList.add(post);
-//                            PostListAdapter.notifyDataSetChanged();
-//
-//                        }
-//
-//                    }
-//
-//
-//                }
-//
-//            }
-//        });
-
         return PostListview;
     }
 
@@ -100,7 +65,7 @@ public class PostSearchFragment extends android.support.v4.app.Fragment {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new Reading1Fragment(), "最新文章");
         adapter.addFragment(new Reading2Fragment(), "熱門文章");
-        adapter.addFragment(new Reading3Fragment(), "CM推薦文章");
+        adapter.addFragment(new Reading3FragmentSearch(), "搜尋文章");
         viewPager.setAdapter(adapter);
 
 

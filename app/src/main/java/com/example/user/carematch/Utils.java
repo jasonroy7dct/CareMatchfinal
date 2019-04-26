@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.carematch.User;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -66,31 +67,7 @@ import static android.app.Activity.RESULT_OK;
 public class Utils {
 
     public static View header;
-    //    public static void getCart(String androidId, final Context context, final TextView numberProducts) {
-    //        Query query = FirebaseFirestore.getInstance()
-    //                .collection("carts")
-    //                .document(androidId)
-    //                .collection("products");
-    //
-    //        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot snapshot,
-//                                @Nullable FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    return;
-//                }
-//                int n = 0;
-//                // Convert query snapshot to a list of chats
-//                assert snapshot != null;
-//                List<CartProduct> products = snapshot.toObjects(CartProduct.class);
-    //                for (int i = 0; i < products.size(); i++) {
-    //                    n = n + products.get(i).getNumber();
-    //                }
-    //                numberProducts.setText(String.format(context.getString(R.string.numberOfPrd), n));
-    //            }
-    //        });
-    //
-    //    }
+
 
     public static void setNavigationView(
             NavigationView navigationView,
@@ -115,8 +92,9 @@ public class Utils {
                 if(documentSnapshot != null) {
                     if(documentSnapshot.exists()){
                         User user = documentSnapshot.toObject(User.class);
-                        name.setText(String.format("%s %s", user.getUsername(), user.getOldname()));
+                        name.setText(String.format("%s %s", user.getName(), user.getSurname()));
                         status.setText(user.getMembership());
+
 
                         if(!user.getThumb_image().equals("default")){
                             //                            Picasso.with(activity.getApplicationContext())

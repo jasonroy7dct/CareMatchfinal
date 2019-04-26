@@ -5,13 +5,6 @@
     <!--<include layout="@layout/actionbar_normal" android:id="@+id/toolbar" />-->
 
 
-    <!--<ImageView-->
-        <!--android:id="@+id/logo"-->
-        <!--android:layout_width="179dp"-->
-        <!--android:layout_height="36dp"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:src="@drawable/logo_blueword" />-->
     <TextView
         android:id="@+id/title_textView"
         android:layout_width="match_parent"
@@ -22,6 +15,7 @@
         android:gravity="center"
         android:textSize="22sp"
         android:layout_marginBottom="5dp"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,43 +61,43 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:padding="10dp"
-            android:weightSum="1">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:padding="10dp"-->
+            <!--android:weightSum="1">-->
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.4"
-                android:text="Or Sign Up With"
-                android:textSize="18sp" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_weight="0.4"-->
+                <!--android:text="Or Sign Up With"-->
+                <!--android:textSize="18sp" />-->
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:src="@drawable/facebook" />
+            <!--<ImageView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="0.2"-->
+                <!--android:src="@drawable/facebook" />-->
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:src="@drawable/twitter" />
+            <!--<ImageView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="0.2"-->
+                <!--android:src="@drawable/twitter" />-->
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:src="@drawable/googleplus" />
+            <!--<ImageView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="0.2"-->
+                <!--android:src="@drawable/googleplus" />-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
     </android.support.v7.widget.CardView>
 
 

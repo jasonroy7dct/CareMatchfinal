@@ -5,7 +5,15 @@
                 android:layout_height="match_parent">
 
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:src="@drawable/cm90"
+        />
+
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/image"
         android:id="@+id/products_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

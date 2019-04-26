@@ -25,6 +25,7 @@
                 android:id="@+id/mybook_mybook"
                 android:text="我的預約"
                 android:textSize="30sp"
+                android:layout_centerInParent="true"
                 android:textColor="@color/startblue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -39,20 +40,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <ImageView
-                android:layout_alignParentRight="true"
-                android:src="@drawable/logo_transparent"
-                android:layout_width="200dp"
-                android:layout_height="70dp" />
 
 
         </RelativeLayout>
 
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/MyBook_list"
+            android:id="@+id/care_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
+
         </android.support.v7.widget.RecyclerView>
 
 

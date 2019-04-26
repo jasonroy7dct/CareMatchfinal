@@ -1,15 +1,14 @@
 package com.example.user.carematch;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,10 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.user.carematch.User;
-import com.example.user.carematch.newPost.PostActivity;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,8 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +57,7 @@ public class AddHumanReview extends AppCompatActivity {
         final String humanId = intent.getStringExtra("HumanId");
         final String currentUserID = auth.getCurrentUser().getUid();
         Log.d(TAG,"HumanId"+humanId);
+
         humanName=(TextView)findViewById(R.id.human_name);
         mFirestore = FirebaseFirestore.getInstance();
         btnSubmit = (Button)findViewById(R.id.btn_submit);
@@ -102,18 +96,19 @@ public class AddHumanReview extends AppCompatActivity {
                 }
             }
         });
+
         btnSubmit.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder mBuider = new AlertDialog.Builder(AddHumanReview.this);
-                mBuider.setTitle("");
-                mBuider.setIcon(R.drawable.logo);
-                mBuider.setMessage("確認評論");
-                mBuider.setPositiveButton("確認", new DialogInterface.OnClickListener() {
-                    private DocumentSnapshot snapshot;
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+//                final AlertDialog.Builder mBuider = new AlertDialog.Builder(AddHumanReview.this);
+//                mBuider.setTitle("");
+//                mBuider.setIcon(R.drawable.logo);
+//                mBuider.setMessage("確認評論");
+//                mBuider.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+//                    private DocumentSnapshot snapshot;
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
 
                         String review = EditText_Review.getText().toString();
 
@@ -129,23 +124,12 @@ public class AddHumanReview extends AppCompatActivity {
                                 Toast.makeText(AddHumanReview.this,"上傳成功！",Toast.LENGTH_SHORT).show();
 
 
-//                                Intent intent = new Intent();
-//                                intent.setClass(getApplicationContext(), HumanPage.class);
-//                                intent.putExtra("HumanId", humanId);
-//                                Log.d(TAG,"Id: "+humanId);
-//                                startActivity(intent);
 
                                 Intent mainIntent = new Intent(AddHumanReview.this, HumanPage.class);
                                 mainIntent.putExtra("HumanId", humanId);
                                 Log.d(TAG,"Id: "+humanId);
                                 startActivity(mainIntent);
                                 finish();
-
-//                                fragmentManager = getFragmentManager();
-//                                fragmentTransaction = fragmentManager.beginTransaction();
-//                                fragmentTransaction.replace(R.id.diarylayout, new Fragment_Diary_RestList())
-//                                        .addToBackStack(null)
-//                                        .commit();
 
 
                             }
@@ -156,8 +140,8 @@ public class AddHumanReview extends AppCompatActivity {
                                 Toast.makeText(AddHumanReview.this,"上傳失敗",Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }
-                }).show();
+
+//                }).show();
 
             }
 

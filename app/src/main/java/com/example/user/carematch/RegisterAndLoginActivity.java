@@ -48,14 +48,14 @@ public class RegisterAndLoginActivity extends AppCompatActivity implements ViewP
         switch (position){
             case 0:{
                 title.setText(R.string.login);
-                loginIndicator.setBackgroundColor(getResources().getColor(R.color.green_bg));
-                registerIndicator.setBackgroundColor(getResources().getColor(R.color.light_gray));
+                loginIndicator.setBackgroundColor(getResources().getColor(R.color.startblue));
+                registerIndicator.setBackgroundColor(getResources().getColor(R.color.startblue));
                 break;
             }
             case 1:{
                 title.setText(R.string.register);
-                loginIndicator.setBackgroundColor(getResources().getColor(R.color.light_gray));
-                registerIndicator.setBackgroundColor(getResources().getColor(R.color.green_bg));
+                loginIndicator.setBackgroundColor(getResources().getColor(R.color.startblue));
+                registerIndicator.setBackgroundColor(getResources().getColor(R.color.startblue));
                 break;
             }
             default:break;

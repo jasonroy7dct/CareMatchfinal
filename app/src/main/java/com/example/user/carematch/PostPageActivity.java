@@ -1,5 +1,6 @@
 package com.example.user.carematch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,8 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,12 +25,14 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,6 +41,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PostPageActivity extends AppCompatActivity {
     private static final String TAG = "FireLog";
@@ -50,6 +57,8 @@ public class PostPageActivity extends AppCompatActivity {
     public TextView postThumb;
     public TextView postDate;
     public ImageView postImage;
+
+
 
 
     ActionBar actionBar;
@@ -68,6 +77,46 @@ public class PostPageActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();//取得傳遞過來的資料
         String postId = intent.getStringExtra("PostId");
+
+        PostList = new ArrayList<>();
+        PostListAdapter = new PostListAdapter(getApplicationContext(), PostList);
+        //取得RecylerView物件，設定佈局及adapter
+        mMainList = (RecyclerView) findViewById(R.id.post_list);
+        mMainList.setHasFixedSize(true);
+        mMainList.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
+        mMainList.setAdapter(PostListAdapter);
+
+        db.collection("Post")
+//                .whereEqualTo("Post_type", storename)
+                .orderBy("Post_date", Query.Direction.DESCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        if (e != null) {
+
+                            Log.d(TAG, "Error :" + e.getMessage());
+                        } else {
+                            for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+
+                                if (doc.getType() == DocumentChange.Type.ADDED) {
+
+                                    String post_id = doc.getDocument().getId();
+
+                                    Post post = doc.getDocument().toObject(Post.class).withId(post_id);//抓ID
+                                    PostList.add(post);
+                                    PostListAdapter.notifyDataSetChanged();
+
+                                }
+
+                            }
+
+
+                        }
+
+                    }
+                });
+
+
         postTitle = (TextView) findViewById(R.id.post_title);
         postDesc = (TextView) findViewById(R.id.post_desc);
         postDate = (TextView) findViewById(R.id.post_date);

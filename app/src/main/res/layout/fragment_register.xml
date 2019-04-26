@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.user.carematch.RegisterFragment"
     android:id="@+id/content">
 
 
@@ -31,7 +30,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_action_user"
+                        android:src="@drawable/profile_oldman_info"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="8dp"/>
 
@@ -40,18 +39,18 @@
                         android:layout_height="50dp"
                         android:textColorHint="@color/textColor"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="10dp">
 
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:hint="姓名"
+                            android:hint="老人名字"
                             android:inputType="textPersonName"
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/textColor"
                             android:textColorHint="@color/light_gray"
-                            android:id="@+id/username"/>
+                            android:id="@+id/tv_surname"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -77,18 +76,18 @@
                         android:layout_height="50dp"
                         android:textColorHint="@color/textColor"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="10dp">
 
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:hint="老人姓名"
+                            android:hint="姓名"
                             android:inputType="textPersonName"
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/textColor"
                             android:textColorHint="@color/light_gray"
-                            android:id="@+id/oldname"/>
+                            android:id="@+id/tv_name"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -115,8 +114,7 @@
                         android:layout_height="50dp"
                         android:textColorHint="@color/textColor"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        >
+                        android:layout_marginLeft="10dp">
 
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
@@ -126,7 +124,7 @@
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/textColor"
                             android:textColorHint="@color/light_gray"
-                            android:id="@+id/email"/>
+                            android:id="@+id/tv_email"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -153,18 +151,17 @@
                         android:layout_height="50dp"
                         android:textColorHint="@color/textColor"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        >
+                        android:layout_marginLeft="10dp">
 
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="手機"
+                            android:hint="手機號碼"
                             android:inputType="number"
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/textColor"
                             android:textColorHint="@color/light_gray"
-                            android:id="@+id/phone"/>
+                            android:id="@+id/tv_phone_number"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -191,8 +188,7 @@
                         android:layout_height="50dp"
                         android:textColorHint="@color/textColor"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        >
+                        android:layout_marginLeft="10dp">
 
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
@@ -229,8 +225,8 @@
                         android:layout_height="50dp"
                         android:textColorHint="@color/textColor"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="10dp">
 
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
@@ -240,7 +236,7 @@
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/textColor"
                             android:textColorHint="@color/light_gray"
-                            android:id="@+id/address"/>
+                            android:id="@+id/tv_address"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -260,8 +256,8 @@
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:text="註冊"
-                        android:background="@drawable/button_style"
-                        android:textColor="@color/white"
+                        android:background="@color/white"
+                        android:textColor="@color/black"
                         android:layout_marginBottom="50dp"
                         android:layout_marginTop="5dp"
                         android:id="@+id/registerBtn"/>

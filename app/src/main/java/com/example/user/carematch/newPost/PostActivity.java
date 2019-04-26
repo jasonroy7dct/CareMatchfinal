@@ -114,12 +114,8 @@ public class PostActivity extends AppCompatActivity {
                         .setCropShape(CropImageView.CropShape.RECTANGLE)
                         .start(PostActivity.this);
 
-                //
                 addNewPost();
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"SelectPicture"),PICK_IMAGE_REQUEST);
+
             }
         });
         postBtn.setOnClickListener(new View.OnClickListener() {
@@ -157,19 +153,6 @@ public class PostActivity extends AppCompatActivity {
                                         .setQuality(2)
                                         .compressToBitmap(newImageFile);
 
-//                                //
-//                                Glide.with(newPostImage.getContext())
-//                                        .using(new FirebaseImageLoader())
-//                                        .load(file_path)
-//                                        .into(newPostImage);
-
-
-//
-//                                //加上去
-//                                Intent intent = new Intent();
-//                                intent.setType("image/*");
-//                                intent.setAction(intent.ACTION_GET_CONTENT);
-//                                startActivityForResult(Intent.createChooser(intent,"SelectPicture"),PICK_IMAGE_REQUEST);
 
                             }
                             //原本是IOException

@@ -12,6 +12,10 @@ public class Human extends HumanID {
     private String H_sex;
     private String H_years;
     private String H_price;
+    private String H_time;
+    private String H_ava;
+    private String H_region;
+
 
     public Human(String h_region) {
         H_region = h_region;
@@ -25,16 +29,15 @@ public class Human extends HumanID {
         H_region = h_region;
     }
 
-    private String H_region;
-
-
 
 
 
     public Human() {
     }
 
-    public Human(String h_years, String h_sex, String h_exp,String h_age, String h_city, String h_name, String h_educate, String h_score, String h_image,String h_price) {
+    public Human(String h_years, String h_sex, String h_exp,String h_age,
+                 String h_city, String h_name, String h_educate, String h_score,
+                 String h_image,String h_price,String h_time, String h_ava) {
         this.H_years = h_years;
         this.H_image=h_image;
         this.H_sex = h_sex;
@@ -45,7 +48,19 @@ public class Human extends HumanID {
         this.H_educate = h_educate;
         this.H_score = h_score;
         this.H_price=h_price;
+        this.H_time=h_time;
+        this.H_ava=h_ava;
+
     }
+
+    public String getH_ava() {
+        return H_ava;
+    }
+
+    public void setH_ava(String h_ava) {
+        this.H_ava = h_ava;
+    }
+
     public String getH_image() {
         return H_image;
     }
@@ -123,5 +138,13 @@ public class Human extends HumanID {
 
     public void setH_score(String h_score) {
         this.H_score = h_score;
+    }
+
+    public String getH_time() {
+        return H_time;
+    }
+
+    public void setH_time(String h_time) {
+        this.H_time = h_time;
     }
 }

@@ -17,6 +17,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -73,7 +74,6 @@
         <activity android:name=".Medical_Resourse_SearchActivity" />
 
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -84,35 +84,18 @@
 
 
 
+
+
+
+
+
         <activity android:name=".RegisterAndLoginActivity"/>
 
 
-
-
-
-
-
-
-
-
-        <activity android:name=".Register1Activity"/>
-
-
-
-
-
-        <activity android:name=".LoginActivity" />
         <activity android:name=".ProductInformationActivity" />
-        <activity android:name=".mybookActivity" />
-        <activity android:name=".BookingActivity" />
-        <activity android:name=".MyBookInformationActivity" />
-        <activity android:name=".TransportationActivity" />
         <activity android:name=".ArticleActivity" />
         <activity android:name=".PostPageActivity" />
         <activity android:name=".GoogleMapBtn" />
-        <activity android:name=".Activity_First1" />
-        <activity android:name=".ReservationConfirmedList" />
-        <activity android:name=".ReservationConfirmedActivity" />
         <activity android:name=".newPost.PostActivity" />
 
         <activity android:name=".HumanPage" />
@@ -129,6 +112,19 @@
 
         <activity android:name=".StorePage" />
         <activity android:name=".StoreActivity" />
+        <activity android:name=".CmActivity" />
+        <activity android:name=".ReservationList" />
+        <activity android:name=".HumanCheck" />
+        <activity android:name=".WebCamera" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".CareList" />
+
+
+
+
+
+
+
 
 
 

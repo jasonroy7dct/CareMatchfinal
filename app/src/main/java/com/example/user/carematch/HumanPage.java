@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.facebook.accountkit.internal.AccountKitController.getApplicationContext;
+
 public class HumanPage extends AppCompatActivity {
     private static final String TAG ="FireLog";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -57,10 +61,18 @@ public class HumanPage extends AppCompatActivity {
     public TextView humanSex;
     public TextView humanYears;
     public TextView humanExp;
+    public TextView humanTime;
+    public TextView humanAva;
     public ImageView humanImage;
     private Button addButton;
+    private Button bookButton;
 
     ActionBar actionBar;
+
+
+    private RecyclerView mMainList1;
+    private HumanListAdapter HumanListAdapter;
+    private List<Human> HumanList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +89,7 @@ public class HumanPage extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         androidId = auth.getCurrentUser().getUid();
+
         ReviewList = new ArrayList<>();
         ReviewListAdapter = new ReviewListAdapter(getApplicationContext(),ReviewList);
         //取得RecylerView物件，設定佈局及adapter
@@ -84,8 +97,23 @@ public class HumanPage extends AppCompatActivity {
         mMainList.setHasFixedSize(true);
         mMainList.setLayoutManager(new LinearLayoutManager(this));
         mMainList.setAdapter(ReviewListAdapter);
-        Intent intent = this.getIntent();//取得傳遞過來的資料
+
+        //
+
+        HumanList = new ArrayList<>();
+        HumanListAdapter = new HumanListAdapter(getApplicationContext(), HumanList);
+        //取得RecylerView物件，設定佈局及adapter
+        mMainList1 = (RecyclerView) findViewById(R.id.human_list);
+        mMainList1.setHasFixedSize(true);
+        mMainList1.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mMainList1.setAdapter(HumanListAdapter);
+
+
+        final String currentUserID = auth.getCurrentUser().getUid();
+        //取得傳遞過來的資料
+        Intent intent = this.getIntent();
         final String humanId = intent.getStringExtra("HumanId");
+
         humanName=(TextView)findViewById(R.id.human_name);
         humanCity=(TextView)findViewById(R.id.human_city);
         humanEducate=(TextView)findViewById(R.id.human_educate);
@@ -93,12 +121,17 @@ public class HumanPage extends AppCompatActivity {
         humanExp=(TextView) findViewById(R.id.human_exp);
         humanSex=(TextView) findViewById(R.id.human_sex);
         humanAge=(TextView) findViewById(R.id.human_age);
+        humanTime =(TextView) findViewById(R.id.human_time);
+        humanAva =(TextView) findViewById(R.id.human_ava);
         humanImage=(ImageView) findViewById(R.id.human_image);
+
+
         addButton=(Button) findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Context context=view.getContext();
+
 
                 Intent intent = new Intent();
                 intent.setClass(context, AddHumanReview.class);
@@ -109,7 +142,35 @@ public class HumanPage extends AppCompatActivity {
 
             }
         });
-        db.collection("HumanReview").whereEqualTo("Human_id",humanId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+
+
+        //我要預約
+        bookButton =(Button) findViewById(R.id.book_care);
+        bookButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+
+                Context context=view.getContext();
+
+
+                Intent intent = new Intent();
+                intent.setClass(context, HumanCheck.class);
+                intent.putExtra("HumanId", humanId);
+
+                Log.d(TAG,"Id: "+humanId);
+                context.startActivity(intent);
+
+
+
+            }
+        });
+
+
+        db.collection("HumanReview")
+                .whereEqualTo("Human_id",humanId)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if (e != null) {
@@ -140,7 +201,7 @@ public class HumanPage extends AppCompatActivity {
 
 
 
-        Task<DocumentSnapshot> documentSnapshotTask = db.collection("Human").document(humanId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("Human").document(humanId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -153,6 +214,9 @@ public class HumanPage extends AppCompatActivity {
                         humanExp.setText(document.get("H_exp").toString());
                         humanSex.setText(document.get("H_sex").toString());
                         humanAge.setText(document.get("H_age").toString());
+                        humanTime.setText(document.get("H_time").toString());
+
+
                         String image = document.get("H_image").toString();
                         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                         StorageReference picReference = storageReference.child("Human/"+image);
@@ -171,5 +235,10 @@ public class HumanPage extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
+
     }
 }

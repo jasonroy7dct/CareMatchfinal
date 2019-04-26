@@ -74,6 +74,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         final String post_id =PostList.get(position).postId;//抓ID ,List可以替換
 
 
+
         holder.postTitle.setText(PostList.get(position).getPost_title());
         holder.postDesc.setText(PostList.get(position).getPost_desc());
         holder.postDate.setText(PostList.get(position).getPost_date());
@@ -97,6 +98,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
 
                 Intent intent = new Intent();
                 intent.setClass(context, PostPageActivity.class);
+                intent.putExtra("PostId", post_id);
                 intent.putExtra("PostId", post_id);
                 Log.d(TAG,"Id: "+post_id);
                 context.startActivity(intent);
@@ -181,7 +183,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
 
 
         if (firebaseAuth.getCurrentUser() != null) {
-            db.collection("Post/" + post_id + "/Likes").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            db.collection("Post/" + post_id + "/Likes")
+                    .document(currentUserID)
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
@@ -199,7 +203,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.like_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection("Post/" + post_id + "/Likes").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                db.collection("Post/" + post_id + "/Likes")
+                        .document(currentUserID).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {

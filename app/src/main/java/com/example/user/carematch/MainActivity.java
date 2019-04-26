@@ -1,8 +1,12 @@
 package com.example.user.carematch;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,11 +18,13 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,15 +33,22 @@ public class MainActivity extends AppCompatActivity implements
         BottomNavigationView.OnNavigationItemSelectedListener{
 
 
-    //設定id
-    private String newBookId;
-    private FragmentManager childFragmentManager;
-
-    public String getNewBookId() {
-        return newBookId;
+    //設定搜尋id
+    private String newSearchKey;
+    public String getNewSearchKey() {
+        return newSearchKey;
     }
-    public void setNewBookId(String bookId) {
-        this.newBookId = bookId;
+    public void setNewSearchKey(String searchKey){
+        this.newSearchKey = searchKey;
+    }
+
+    //搜尋文章type
+    private String newType;
+    public String getNewType() {
+        return newType;
+    }
+    public void setNewType(String type) {
+        this.newType = type;
     }
 
 
@@ -46,11 +59,7 @@ public class MainActivity extends AppCompatActivity implements
 
     ActionBar actionBar;
 
-    //Tab功能設計
-    private ViewPager viewPager;
-    private PagerAdapter mPagerAdapter;
-    private TabLayout tabLayout;
-    //Tab設定頁面
+    //設定主頁fragment
     private HomeFragment homeFragment;
     private BookFragment bookFragment;
     private FavoriteFragment favoriteFragment;
@@ -135,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
 
 
         switch (item.getItemId()) {
@@ -172,77 +180,32 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-//
-//    public void setfragment(Fragment fragment) {
-//
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.framelayout, fragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
-//    }
 
 
-
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Utils.uploadImage(data,requestCode,resultCode,MainActivity.this,mAuth,null);
-//    }
+    private void callInstagram() {
+        String apppackage = "com.instagram.android";
+        Context cx = this;
+        try {
+            Uri uri = Uri.parse("http://instagram.com/_u/care_match");
 
 
+            Intent i = new Intent(Intent.ACTION_VIEW, uri);
+
+            i.setPackage("com.instagram.android");
 
 
+                startActivity(i);
+            } catch (ActivityNotFoundException e) {
 
-//
-////        final ActionBar actionBar = getActionBar();
-//        actionBar = getSupportActionBar();
-//        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
-//        actionBar.setCustomView(R.layout.actionbar);
-//        actionBar.setDisplayShowTitleEnabled(false);
-//        actionBar.setDisplayShowCustomEnabled(true);
-//
-//        mAuth = FirebaseAuth.getInstance();
-//
-//
-//
-//        viewPager = (ViewPager) findViewById(R.id.mainviewPager);
-//        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-//        //Tab註冊Listener
-//        viewPager.addOnPageChangeListener(this);
-//        tabLayout.addOnTabSelectedListener(this);
-//
-//        //將Fragment匯入到viewPager
-//        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-//            @Override
-//            public Fragment getItem(int position) {
-//                switch (position) {
-//                    case 0:
-//                        return homeFragment;
-//                    case 1:
-//                        return bookFragment;
-//                    case 2:
-//                        return favoriteFragment;
-//                    case 3:
-//                        return profileFragment;
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            public int getCount() {
-//                return 4;
-//            }
-//        });
-//
-//    }
-//
-//
-//
-//
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://instagram.com/care_match")));
+            }
+
+        }
+
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, RegisterAndLoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -259,67 +222,34 @@ public class MainActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
             case R.id.action_maps:
-//                startActivity(new Intent(MainActivity.this, MapssActivity.class));
-
                    setfragment(mapsFragment);
                    return true;
-            case R.id.action_settings:
-//                startActivity(new Intent(MainActivity.this, SetUpActivity.class));
+            case R.id.action_opencv:
+                Intent browserIntent =
+                        new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.50.125:6001/stream"));
+                startActivity(browserIntent);
                 return true;
-            case R.id.action_chnage_pass:
-//                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
+            case R.id.action_change_pass:
+                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
                 return true;
             case R.id.action_sign_out:
                 signOut();
                 return true;
+            case R.id.action_ig:
+                callInstagram();
+                return true;
+            case R.id.action_CM:
+                startActivity(new Intent(MainActivity.this, CmActivity.class));
+                return true;
+
             default:
                 return false;
         }
     }
 
 
-    public FragmentManager getChildFragmentManager() {
-        return childFragmentManager;
-    }
 }
 
-
-
-//
-//    @Override
-//    public void onTabSelected(TabLayout.Tab tab) {
-//        //TabLayout中TabItem被點擊時觸發
-//        viewPager.setCurrentItem(tab.getPosition());
-//    }
-//
-//    @Override
-//    public void onTabUnselected(TabLayout.Tab tab){
-//
-//    }
-//
-//    @Override
-//    public void onTabReselected(TabLayout.Tab tab){
-//
-//    }
-//
-//    @Override
-//    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
-//
-//    }
-//
-//    @Override
-//    public void onPageSelected(int position) {
-//        //viewPager滑動後觸發
-//        tabLayout.getTabAt(position).select();
-//    }
-//
-//    @Override
-//    public void onPageScrollStateChanged(int state){
-//
-//    }
-//
-//
-//}
 
 
 

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 //import com.example.user.carematch.request.RequestOptions;
 import com.example.user.carematch.R;
+import com.example.user.carematch.User;
 import com.example.user.carematch.comment.CommentsActivity;
 import com.example.user.carematch.model.BlogPost;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -90,12 +91,48 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         String blog_image = blogPosts.get(position).getImage_url();
         timestamp = blogPosts.get(position).getTimestamp();
         String user_id = blogPosts.get(position).getUser_id();
+//        if (firebaseAuth.getCurrentUser() != null) {
+//            firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid())
+//                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onEvent(DocumentSnapshot documentSnapshot, final FirebaseFirestoreException e) {
+//                            if(documentSnapshot.exists()){
+//                                final User user = documentSnapshot.toObject(User.class);
+//                                String Image=user.getImage();
+//
+//                                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+//                                StorageReference picReference = storageReference.child("users_photos/"+Image);
+//
+//                                Glide.with(holder.userImage.getContext())
+//                                        .using(new FirebaseImageLoader())
+//                                        .load(picReference)
+//                                        .into(holder.userImage);
+//
+//
+//
+//                            }else {
+//
+//                            }
+//                        }
+//                    });
+//        }
+
 
         firebaseFirestore.collection("users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     holder.setUserDescription(task.getResult().getString("name"), task.getResult().getString("image"));
+
+                    String Image=task.getResult().getString("image");
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                    StorageReference picReference = storageReference.child("users_photos/"+Image);
+
+
+                    Glide.with(holder.userImage.getContext())
+                            .using(new FirebaseImageLoader())
+                            .load(picReference)
+                            .into(holder.userImage);
                 } else {
                     Toast.makeText(context, "上傳圖片失敗" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -125,7 +162,6 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                 }
             });
 
-
             firebaseFirestore.collection("BlogPost/" + blog_post_id + "/Comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -140,7 +176,6 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                 }
             });
         }
-
         if (firebaseAuth.getCurrentUser() != null) {
             firebaseFirestore.collection("BlogPost/" + blog_post_id + "/Likes").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -166,6 +201,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                             if (!task.getResult().exists()) {
                                 Map<String, Object> likesMap = new HashMap<>();
                                 likesMap.put("timestamp", FieldValue.serverTimestamp());
+
                                 firebaseFirestore.collection("BlogPost/" + blog_post_id + "/Likes").document(currentUserID).set(likesMap);
                             } else {
                                 firebaseFirestore.collection("BlogPost/" + blog_post_id + "/Likes").document(currentUserID).delete();
@@ -239,10 +275,10 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             name = mView.findViewById(R.id.blog_user_name);
             userImage = mView.findViewById(R.id.blog_user_image);
             name.setText(userName);
-            Glide.with(context).load(userImageString).into(userImage);
+
+//            Glide.with(context).load(userImageString).into(userImage);
+
         }
-
-
 
         public void setBlogImage(String blog_image_thumb, String blog_image) {
             blog_post_image = mView.findViewById(R.id.blog_image);

@@ -3,7 +3,12 @@ package com.example.user.carematch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,126 +36,76 @@ import java.util.List;
 
 public class BlogFragment extends Fragment {
 
-    private RecyclerView blog_list_Rv;
-    private List<BlogPost> blog_list;
-    private ImageButton test;
-
+    private View BlogListview;
+    private static final String TAG ="FireLog";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth firebaseAuth;
-    private BlogRecyclerAdapter blogRecyclerAdapter;
+    private RecyclerView mMainList;
+    private PostListAdapter PostListAdapter;
+    private List<Post> PostList;
 
-
-    DocumentSnapshot lastVisible;
-    private boolean isFirstPageFirstLoad = true;
-
-//
-//    public BlogFragment() {
-//        // Required empty public constructor
-//    }
+    //分類
+    private TabLayout tabLayout;
+    private ViewPager firstViewPager;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_blog, container, false);
-        firebaseAuth = FirebaseAuth.getInstance();
-        blog_list = new ArrayList<>();
-        blog_list_Rv = view.findViewById(R.id.blog_list_view);
-        blogRecyclerAdapter = new BlogRecyclerAdapter(blog_list, view.getContext());
-
-        blog_list_Rv.setHasFixedSize(true);
-        blog_list_Rv.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-        blog_list_Rv.setAdapter(blogRecyclerAdapter);
-
-        //發文
-        test = (ImageButton) view.findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(BlogFragment.this.getActivity(), PostActivity.class));
-
-            }
-        });
-
-        if (firebaseAuth.getCurrentUser() != null) {
-
-            db = FirebaseFirestore.getInstance();
-            blog_list_Rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    Boolean reachedBottom = !recyclerView.canScrollVertically(1);
-                    if (reachedBottom) {
-
-                        loadMorePosts();
-
-                    }
-                }
-            });
-            Query firstQuery =
-                    db.collection("BlogPost")
-                    .orderBy("timestamp", Query.Direction.DESCENDING)
-                    .limit(5);
-            firstQuery
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                    if (!documentSnapshots.isEmpty()) {
-                        if (isFirstPageFirstLoad) {
-                            lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                            blog_list.clear();
-                        }
-                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                            if (doc.getType() == DocumentChange.Type.ADDED) {
-                                String blogPostID = doc.getDocument().getId();
-                                BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
-                                if (isFirstPageFirstLoad) {
-                                    blog_list.add(blogPost);
-                                } else {
-                                    blog_list.add(0, blogPost);
-                                }
-                                blogRecyclerAdapter.notifyDataSetChanged();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-                            }
-                        }
+        BlogListview = inflater.inflate(R.layout.fragment_blog_search, container, false);
 
-                        isFirstPageFirstLoad = false;
-                    }
-                }
-            });
-        }
-        return view;
+
+        firstViewPager = (ViewPager) BlogListview.findViewById(R.id.viewpager_content);
+        // Set Tabs inside Toolbar
+        tabLayout = (TabLayout) BlogListview.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(firstViewPager);
+        setupViewPager(firstViewPager);
+
+
+        return BlogListview;
     }
 
-    private void loadMorePosts() {
-        if (firebaseAuth.getCurrentUser() != null) {
+    //收藏分類
+    private void setupViewPager(ViewPager viewPager) {
 
-            Query nextQuery = db
-                    .collection("BlogPost")
-                    .orderBy("timestamp", Query.Direction.DESCENDING)
-                    .startAfter(lastVisible)
-                    .limit(5);
-            nextQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                    if (!documentSnapshots.isEmpty()) {
-                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                            if (doc.getType() == DocumentChange.Type.ADDED) {
-                                String blogPostID = doc.getDocument().getId();
-                                BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
-                                blog_list.add(blogPost);
-                                blogRecyclerAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }
-            });
-        }
+
+        PostSearchFragment.Adapter adapter = new PostSearchFragment.Adapter(getChildFragmentManager());
+        adapter.addFragment(new BlogFragment1(), "最新討論區");
+        adapter.addFragment(new BlogFragment2(), "我的貼文");
+        viewPager.setAdapter(adapter);
+
+
     }
 
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
+        public Adapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
 }
+
+
+

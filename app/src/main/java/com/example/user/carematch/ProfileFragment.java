@@ -26,7 +26,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 
 import com.androidadvance.topsnackbar.TSnackbar;
 import com.bumptech.glide.Glide;
+import com.example.user.carematch.User;
 import com.example.user.carematch.newPost.PostActivity;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -76,8 +79,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.user.carematch.Register1Activity.PReqCode;
-import static com.example.user.carematch.Register1Activity.REQUESCODE;
+
 import static com.facebook.accountkit.internal.AccountKitController.getApplicationContext;
 
 public class ProfileFragment extends Fragment {
@@ -87,20 +89,31 @@ public class ProfileFragment extends Fragment {
     private StorageReference storageReference;
 
 
-    private TextView username;
-    private TextView oldname;
+
+    private TextView name;
+    private TextView surname;
+
     private TextView email;
-    private TextView phone;
-    private TextView address;
-
     private TextView membership;
-
+    private TextView phone_number;
+    private TextView address;
     private ImageView changeProfile;
     private View view;
     private CircleImageView circleImageView;
     private Activity activity;
+
+
+//    private TextView username;
+//    private TextView oldname;
+//    private TextView email;
+//    private TextView phone;
+//    private TextView address;
+//
+//    private TextView membership;
+
+
     private Context context;
-    private Button  BtnUpload,setupButton,set;
+    private ImageView confirm,set;
     ProgressBar mProgressBar;
     Bitmap compressedImageFile;
 
@@ -115,7 +128,8 @@ public class ProfileFragment extends Fragment {
     Bitmap compressedProfileImageFile;
     boolean username_exists = false;
 
-    public TextView FavCount;
+    public TextView FavCount,CareCounts;
+    public LinearLayout myfav,myblog,tran_res;
 
 
     private final int PICK_IMAGE_REQUEST = 71;
@@ -143,19 +157,29 @@ public class ProfileFragment extends Fragment {
         user_id = auth.getCurrentUser().getUid();
 
 
-        username = view.findViewById(R.id.profile_name);
-        oldname = view.findViewById(R.id.oldname);
-        email = view.findViewById(R.id.profile_phone_email);
-        phone = view.findViewById(R.id.profile_phone_number);
-        address = view.findViewById(R.id.profile_address);
+//        username = view.findViewById(R.id.profile_name);
+//        oldname = view.findViewById(R.id.oldname);
+//        email = view.findViewById(R.id.profile_email);
+//        phone = view.findViewById(R.id.profile_phone_number);
+//        address = view.findViewById(R.id.profile_address);
+//
+//        membership = view.findViewById(R.id.profile_membership);
 
+        name = view.findViewById(R.id.profile_name);
+        surname = view.findViewById(R.id.oldname);
+        email = view.findViewById(R.id.profile_email);
+        phone_number = view.findViewById(R.id.profile_phone_number);
+        address = view.findViewById(R.id.profile_address);
         membership = view.findViewById(R.id.profile_membership);
+        changeProfile = view.findViewById(R.id.change_profile_image);
+        circleImageView = view.findViewById(R.id.circleImageView);
+
+
 
 
         changeProfile = view.findViewById(R.id.change_profile_image);
         circleImageView = view.findViewById(R.id.circleImageView);
-        BtnUpload = view.findViewById(R.id.BtnUpload);
-        setupButton = view.findViewById(R.id.setupButton);
+        confirm = view.findViewById(R.id.confirm);
         mProgressBar = view.findViewById(R.id.post_progress);
 
         FavCount = (TextView) view.findViewById(R.id.FavCount);
@@ -167,8 +191,52 @@ public class ProfileFragment extends Fragment {
 
 
 
+        myblog = (LinearLayout )view.findViewById(R.id.care);
+        myblog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        BtnUpload.setOnClickListener(new View.OnClickListener() {
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.framelayout, new BlogFragment2())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+
+        tran_res = (LinearLayout )view.findViewById(R.id.tran_res);
+        tran_res.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.framelayout, new FavoriteFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        //連接到收藏
+        myfav=(LinearLayout) view.findViewById(R.id.myfav);
+        myfav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.framelayout, new FavoriteFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+
+
+
+
+        changeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
@@ -192,11 +260,11 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        setupButton.setOnClickListener(new View.OnClickListener() {
+        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                addNewPost();
+                Confirm();
 
 
             }
@@ -223,9 +291,9 @@ public class ProfileFragment extends Fragment {
                     if (documentSnapshots != null) {
                         if (!documentSnapshots.isEmpty()) {
                             int count = documentSnapshots.size();
-                            Counts(count);
+                            FavCounts(count);
                         } else {
-                            Counts(0);
+                            FavCounts(0);
                         }
                     }
                 }
@@ -233,10 +301,26 @@ public class ProfileFragment extends Fragment {
         }
 
 
+        if (auth.getCurrentUser() != null) {
+            user.collection("users/" + user_id + "/Care").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    if (documentSnapshots != null) {
+                        if (!documentSnapshots.isEmpty()) {
+                            int count = documentSnapshots.size();
+                            CareCounts(count);
+                        } else {
+                            CareCounts(0);
+                        }
+                    }
+                }
+            });
+        }
+
         return view;
     }
 
-    public void Counts(int count) {
+    public void FavCounts(int count) {
         FavCount = view.findViewById(R.id.FavCount);
 
         String s = Integer.toString(count);
@@ -246,6 +330,17 @@ public class ProfileFragment extends Fragment {
             FavCount.setText(s);
         }
     }
+
+    public void CareCounts(int count) {
+        CareCounts = view.findViewById(R.id.CareCounts);
+
+        String s = Integer.toString(count);
+        if(count>=0){
+            CareCounts.setText(s);
+        }else{
+            CareCounts.setText(s);
+        }
+    }
     public void getUserProfile() {
 
         if (auth.getCurrentUser() != null) {
@@ -253,20 +348,32 @@ public class ProfileFragment extends Fragment {
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                         @Override
                         public void onEvent(DocumentSnapshot documentSnapshot, final FirebaseFirestoreException e) {
-                            if(documentSnapshot.exists()){
+
+                            if (e != null) {
+
+                                Log.d(TAG, "Error :" + e.getMessage());
+
+                            }
+                            else {
                                 final User user = documentSnapshot.toObject(User.class);
+                                name.setText(String.format("%s", user.getName()));
+                                surname.setText(String.format("%s", user.getSurname()));
 
-                                username.setText(String.format("%s", user.getUsername()));
-                                oldname.setText(String.format("%s", user.getOldname()));
-                                phone.setText(user.getPhone());
+                                phone_number.setText(user.getPhoneNumber());
                                 address.setText(user.getAddress());
-                                email.setText(user.getEmail());
-
                                 membership.setText(user.getMembership());
+                                email.setText(auth.getCurrentUser().getEmail());
 
+                                String Image = user.getImage();
 
+                                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                                StorageReference picReference = storageReference.child("users_photos/" + Image);
 
-                            }else {
+                                Glide.with(circleImageView.getContext())
+                                        .using(new FirebaseImageLoader())
+                                        .load(picReference)
+                                        .into(circleImageView);
+
 
                             }
                         }
@@ -275,13 +382,14 @@ public class ProfileFragment extends Fragment {
 
     }
 
+
     private void imagePicker() {
 
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .start(ProfileFragment.this.getActivity());
+//        CropImage.activity()
+//                .setGuidelines(CropImageView.Guidelines.ON)
+//                .setAspectRatio(1, 1)
+//                .setCropShape(CropImageView.CropShape.OVAL)
+//                .start(ProfileFragment.this.getActivity());
 
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -289,12 +397,13 @@ public class ProfileFragment extends Fragment {
         startActivityForResult(Intent.createChooser(intent,"SelectPicture"),PICK_IMAGE_REQUEST);
     }
 
-    private void addNewPost() {
-//        final String dec = newPostDesc.getText().toString();
+    private void Confirm() {
 
         if (filePath != null) {
             mProgressBar.setVisibility(View.VISIBLE);
+
             final String randomName = UUID.randomUUID().toString();
+
             Toast.makeText(ProfileFragment.this.getActivity(), "圖片上傳中", Toast.LENGTH_SHORT).show();
 
             //final
@@ -303,9 +412,6 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     if (task.getResult() != null) {
-                        //原本的，getDownloadUrl不能跑，先刪掉
-                        final String downloadUri = task.getResult().getStorage().getDownloadUrl().toString();
-//                        final String downloadUri = task.getResult().toString();
 
                         if (task.isSuccessful()) {
                             File newImageFile = new File(filePath.getPath());
@@ -318,27 +424,12 @@ public class ProfileFragment extends Fragment {
                                         .setQuality(2)
                                         .compressToBitmap(newImageFile);
 
-//                                //
-//                                Glide.with(newPostImage.getContext())
-//                                        .using(new FirebaseImageLoader())
-//                                        .load(file_path)
-//                                        .into(newPostImage);
-
-
-//
-//                                //加上去
-//                                Intent intent = new Intent();
-//                                intent.setType("image/*");
-//                                intent.setAction(intent.ACTION_GET_CONTENT);
-//                                startActivityForResult(Intent.createChooser(intent,"SelectPicture"),PICK_IMAGE_REQUEST);
-
                             }
                             //原本是IOException
                             catch (Exception e) {
                                 e.printStackTrace();
                             }
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
 
 
                             CropImage.activity()
@@ -358,17 +449,16 @@ public class ProfileFragment extends Fragment {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //原本的，getDownloadUrl不能跑，先刪掉
-                                    String downloathumbUri = taskSnapshot.getStorage().getDownloadUrl().toString();
+//                                    String downloathumbUri = taskSnapshot.getStorage().getDownloadUrl().toString();
 //                                    String downloathumbUri = taskSnapshot.toString();
-
+                                    final String currentUserID = auth.getCurrentUser().getUid();
                                     Map<String, Object> map = new HashMap<>();
-//                                    map.put("image_url", randomName+ ".jpg");
                                     map.put("image", randomName+ ".jpg");
 
 
-                                    user.collection("users").add(map).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    user.collection("users").document(currentUserID).update(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                        public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(ProfileFragment.this.getActivity(), "大頭照上傳成功！", Toast.LENGTH_SHORT).show();
                                                 Intent mainIntent = new Intent(ProfileFragment.this.getActivity(), MainActivity.class);
@@ -456,10 +546,9 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(ProfileFragment.this.getActivity(), "請選擇圖片與撰寫文章！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileFragment.this.getActivity(), "請選擇大頭照！", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -477,8 +566,4 @@ public class ProfileFragment extends Fragment {
     }
 
 }
-
-
-
-
 

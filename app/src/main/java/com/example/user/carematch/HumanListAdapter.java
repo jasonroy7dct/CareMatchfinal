@@ -25,18 +25,25 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HumanListAdapter extends RecyclerView.Adapter<HumanListAdapter.ViewHolder>{
     private static final String TAG = "TEST";
+
+
+    private HumanListAdapter.transPageListener mTransPageListener;//adapter跳轉fragment
+
+
     public List<Human> HumanList;
     public Context context;
 
     private FirebaseAuth firebaseAuth;
     private String androidId;
     private FirebaseFirestore db;
+    public String Care_date;
     Button like_button;
 
     public HumanListAdapter(Context context, List<Human> HumanList){
@@ -50,16 +57,27 @@ public class HumanListAdapter extends RecyclerView.Adapter<HumanListAdapter.View
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_human, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_human1, parent, false);
+
         return new ViewHolder(view);
+
     }
     @Override
+
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.hName.setText(HumanList.get(position).getH_name());
         holder.hExp.setText(HumanList.get(position).getH_exp());
         holder.hCity.setText(HumanList.get(position).getH_city());
         holder.hAge.setText(HumanList.get(position).getH_age());
         holder.hPrice.setText(HumanList.get(position).getH_price());
+        holder.hTime.setText(HumanList.get(position).getH_time());
+        holder.hTime.setText(HumanList.get(position).getH_time());
+        holder.hSex.setText(HumanList.get(position).getH_sex());
+
+
+        holder.hava.setText(HumanList.get(position).getH_ava());
+
+
         String Image=HumanList.get(position).getH_image();
 
         final String currentUserID = firebaseAuth.getCurrentUser().getUid();
@@ -77,11 +95,31 @@ public class HumanListAdapter extends RecyclerView.Adapter<HumanListAdapter.View
                 .into(holder.hImage);
 
 
-        //以下為cardview按鈕監聽
+
+//        //搜尋
+//        holder.mView.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                Context context=view.getContext();
+//
+//                mTransPageListener.onTransPageClick();
+//
+//                Intent intent = new Intent();
+//                intent.setClass(context, HumanPage.class);
+//                intent.putExtra("HumanId", human_id);
+//                Log.d(TAG,"Id: "+human_id);
+//                context.startActivity(intent);
+//
+//
+//            }
+//        });
+
+        //傳值
         holder.mView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Context context=view.getContext();
+
 
                 Intent intent = new Intent();
                 intent.setClass(context, HumanPage.class);
@@ -123,6 +161,7 @@ public class HumanListAdapter extends RecyclerView.Adapter<HumanListAdapter.View
                                     favorite.put("human_id",human_id);
                                     db.collection("users/" + currentUserID + "/favorites").document(human_id).set(favorite);
 
+
                                 } else {
                                     db.collection("users/" + currentUserID + "/favorites").document(human_id).delete();
 
@@ -137,7 +176,15 @@ public class HumanListAdapter extends RecyclerView.Adapter<HumanListAdapter.View
             });
         }
 
+
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        Care_date = String.valueOf(year)  +"/"+ String.valueOf(month + 1) +"/"+ String.valueOf(day);
     }
+
     @Override
     public int getItemCount() {
         return HumanList.size();
@@ -151,6 +198,9 @@ public class HumanListAdapter extends RecyclerView.Adapter<HumanListAdapter.View
         public TextView hCity;
         public TextView hAge;
         public TextView hPrice;
+        public TextView hTime;
+        public TextView hSex;
+        public TextView hava;
         public ImageView fav_button;
 
 
@@ -166,9 +216,23 @@ public class HumanListAdapter extends RecyclerView.Adapter<HumanListAdapter.View
             hAge = (TextView) mView.findViewById(R.id.h_age);
             hPrice = (TextView) mView.findViewById(R.id.h_price);
             hCity = (TextView) mView.findViewById(R.id.h_city);
+            hTime = (TextView) mView.findViewById(R.id.h_time);
+            hSex = (TextView) mView.findViewById(R.id.h_sex);
+            hava = (TextView) mView.findViewById(R.id.h_ava);
             fav_button = (ImageView) mView.findViewById(R.id.fav_button);
 
         }
 
     }
+
+    public interface transPageListener {
+        public void onTransPageClick();
+
+    //adapter跳轉fragment並攜帶需要的資料
+//    void onTransPageClick();
+
+    }
+    public void setOnTransPageClickListener (HumanListAdapter.transPageListener transPageListener) {
+        this.mTransPageListener = transPageListener;
+    }//adapter跳轉fragment
 }

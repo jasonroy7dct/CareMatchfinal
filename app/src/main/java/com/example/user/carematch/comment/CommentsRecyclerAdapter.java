@@ -14,11 +14,14 @@ import com.bumptech.glide.Glide;
 import com.example.user.carematch.R;
 //import com.example.carematch.myblogapp.model.Comments;
 import com.example.user.carematch.model.Comments;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -52,6 +55,8 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder holder, int position) {
         holder.setIsRecyclable(false);
+        String user_id = commentsList.get(position).getUser_id();
+
 
         if (firebaseAuth != null) {
             firebaseFirestore.collection("users").document(commentsList.get(position).getUser_id()).get()
@@ -69,6 +74,28 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
 
         String commentMessage = commentsList.get(position).getMessage();
         holder.setComment_message(commentMessage);
+
+
+
+        firebaseFirestore.collection("users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    holder.setUserDescription(task.getResult().getString("name"), task.getResult().getString("image"));
+
+                    String Image=task.getResult().getString("image");
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                    StorageReference picReference = storageReference.child("users_photos/"+Image);
+//
+                    Glide.with(holder.userImage.getContext())
+                            .using(new FirebaseImageLoader())
+                            .load(picReference)
+                            .into(holder.userImage);
+                } else {
+                }
+            }
+
+        });
     }
 
     @Override
@@ -109,9 +136,9 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
             userImage = mView.findViewById(R.id.comment_image);
             name.setText(nameText);
 
-            Glide.with(context)
-                    .load(userImageComment)
-                    .into(userImage);
+//            Glide.with(context)
+//                    .load(userImageComment)
+//                    .into(userImage);
 
         }
     }

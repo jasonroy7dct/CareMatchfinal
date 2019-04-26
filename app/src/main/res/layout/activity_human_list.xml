@@ -6,6 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearlayout1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:background="@drawable/booking_2"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="352dp"-->
+            <!--android:layout_height="82dp"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:padding="10dp"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:src="@drawable/logo_blueword"-->
+            <!--android:tint="@color/white" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="22sp"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:text="看護預約"-->
+            <!--android:layout_marginBottom="15dp"-->
+            <!--android:fontFamily="sans-serif-medium"/>-->
+
+    <!--</LinearLayout>-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

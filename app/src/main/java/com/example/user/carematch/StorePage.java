@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StorePage extends AppCompatActivity {
-//    private static final String TAG ="Dairy";
+    //    private static final String TAG ="Dairy";
 //    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 //    public TextView storeName;
 //    public TextView storeAddress;
@@ -43,7 +43,7 @@ public class StorePage extends AppCompatActivity {
 //    public TextView storePhone;
 //    public TextView storeDetails;
 //    public ImageView storeImage;
-    private static final String TAG ="FireLog";
+    private static final String TAG = "FireLog";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private RecyclerView mMainList;
     private RecyclerView mMainList1;
@@ -51,7 +51,7 @@ public class StorePage extends AppCompatActivity {
     private ProductsListAdapter ProductsListAdapter;
     private List<Store> StoreList;
     private List<Products> ProductsList;
-//    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public TextView storeName;
     public TextView storeAddress;
     public TextView storeTime;
@@ -61,7 +61,6 @@ public class StorePage extends AppCompatActivity {
     public ImageView position;
 
     ActionBar actionBar;
-
 
 
     @Override
@@ -78,60 +77,34 @@ public class StorePage extends AppCompatActivity {
 
         Intent intent = this.getIntent();//取得傳遞過來的資料
         String storeId = intent.getStringExtra("StoreId");
-        String storename =intent.getStringExtra("s");
-        final String x =intent.getStringExtra("lat");
-        final String y =intent.getStringExtra("lon");
-        storeName=(TextView)findViewById(R.id.store_name);
-        storeAddress=(TextView)findViewById(R.id.store_address);
-        storeTime=(TextView)findViewById(R.id.store_time);
-        storePhone=(TextView) findViewById(R.id.store_phone);
-        storeDetails=(TextView) findViewById(R.id.store_details);
-        storeImage=(ImageView) findViewById(R.id.store_image);
+        String storename = intent.getStringExtra("s");
+        final String x = intent.getStringExtra("lat");
+        final String y = intent.getStringExtra("lon");
+        storeName = (TextView) findViewById(R.id.store_name);
+        storeAddress = (TextView) findViewById(R.id.store_address);
+        storeTime = (TextView) findViewById(R.id.store_time);
+        storePhone = (TextView) findViewById(R.id.store_phone);
+        storeDetails = (TextView) findViewById(R.id.store_details);
+        storeImage = (ImageView) findViewById(R.id.store_image);
 
         StoreList = new ArrayList<>();
-        StoreListAdapter = new StoreListAdapter(getApplicationContext(),StoreList);
+        StoreListAdapter = new StoreListAdapter(getApplicationContext(), StoreList);
         //取得RecylerView物件，設定佈局及adapter
         mMainList = (RecyclerView) findViewById(R.id.store_list);
         mMainList.setHasFixedSize(true);
         mMainList.setLayoutManager(new LinearLayoutManager(this));
         mMainList.setAdapter(StoreListAdapter);
-        ProductsList= new ArrayList<>();
-        ProductsListAdapter = new ProductsListAdapter(getApplicationContext(),ProductsList);
+        ProductsList = new ArrayList<>();
+        ProductsListAdapter = new ProductsListAdapter(getApplicationContext(), ProductsList);
         //取得RecylerView物件，設定佈局及adapter
         mMainList1 = (RecyclerView) findViewById(R.id.products_list);
         mMainList1.setHasFixedSize(true);
         mMainList1.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
         mMainList1.setAdapter(ProductsListAdapter);
-//        Task<DocumentSnapshot> documentSnapshotTask = db.collection("Store").whereEqualTo("Store_name","s").addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        storeName.setText(document.get("Store_name").toString());
-//                        storeAddress.setText(document.get("Store_address").toString());
-//                        storeDetails.setText(document.get("Store_details").toString());
-//                        storeTime.setText(document.get("Store_time").toString());
-//                        storePhone.setText(document.get("Store_phone").toString());
-//                        String image = document.get("Store_image").toString();
-//                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-//                        StorageReference picReference = storageReference.child("Store/"+image);
-//
-//                        Glide.with(storeImage.getContext())
-//                                .using(new FirebaseImageLoader())
-//                                .load(picReference)
-//                                .into(storeImage);
-//
-//
-//                    } else {
-//                        Log.d(TAG, "No such document");
-//                    }
-//                } else {
-//                    Log.d(TAG, "get failed with ", task.getException());
-//                }
-//            }
-//        });
-        db.collection("Store").whereEqualTo("Store_name",storename).addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+        db.collection("Store")
+                .whereEqualTo("Store_name", storename)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if (e != null) {
@@ -157,7 +130,9 @@ public class StorePage extends AppCompatActivity {
             }
         });
 
-        db.collection("Products").whereEqualTo("Products_storename",storename).orderBy("Products_name").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection("Products")
+                .whereEqualTo("Products_storename", storename)
+                .orderBy("Products_name").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if (e != null) {
@@ -183,46 +158,6 @@ public class StorePage extends AppCompatActivity {
             }
         });
 
-
-
-//        storeName=(TextView)findViewById(R.id.store_name);
-//        storeAddress=(TextView)findViewById(R.id.store_address);
-//        storeTime=(TextView)findViewById(R.id.store_time);
-//        storePhone=(TextView) findViewById(R.id.store_phone);
-//        storeDetails=(TextView) findViewById(R.id.store_details);
-//        storeImage=(ImageView) findViewById(R.id.store_image);
-//        Intent intent = getIntent();
-//        Bundle bundle = intent.getExtras();
-//        String s=bundle.getString("s");
-//        Task<DocumentSnapshot> documentSnapshotTask = db.collection("Store").document().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        storeName.setText(document.get("Store_name").toString());
-//                        storeAddress.setText(document.get("Store_address").toString());
-//                        storeDetails.setText(document.get("Store_details").toString());
-//                        storeTime.setText(document.get("Store_time").toString());
-//                        storePhone.setText(document.get("Store_phone").toString());
-//                        String image = document.get("Store_image").toString();
-//                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-//                        StorageReference picReference = storageReference.child("Store/"+image);
-//
-//                        Glide.with(storeImage.getContext())
-//                                .using(new FirebaseImageLoader())
-//                                .load(picReference)
-//                                .into(storeImage);
-//
-//
-//                    } else {
-//                        Log.d(TAG, "No such document");
-//                    }
-//                } else {
-//                    Log.d(TAG, "get failed with ", task.getException());
-//                }
-//            }
-//        });
 
     }
 }

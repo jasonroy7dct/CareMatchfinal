@@ -81,29 +81,16 @@
                 android:text="" />
         </LinearLayout>
 
-        <!--<TextView-->
-        <!--android:id="@+id/post_comment_count"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginEnd="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:text="0 Comments"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"/>-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorPrimary" />
 
-        <!--<ImageView-->
-        <!--android:id="@+id/post_comment_icon"-->
-        <!--android:layout_width="30dp"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:srcCompat="@mipmap/action_comment_icon" />-->
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/post_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
     </ScrollView>

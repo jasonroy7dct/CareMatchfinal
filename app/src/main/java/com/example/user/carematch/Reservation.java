@@ -9,124 +9,102 @@ import java.util.Date;
 public class Reservation extends ReservationID {
 
 
-    String user_id;
-    String user_name;
+    private String User_id;
+    private String User_name;
 
-    String reservation_name;
-    String reservation_date;
-    String reservation_content;
-    String reservation_time;
-    String trans_id;
-    String reservation_photoUrl;
-
-    Date reservation_uploaddate;
-
-//    String class_name;
-//    String class_id;
-//    String student_id;
-//    String teacher_email;
-//    String leave_photoUrl;
-
-//    Timestamp Reservation_date;
-//    Timestamp Reservation_Stime;
-//    Timestamp Reservation_Etime;
+    private String Reservation_name;
+    private String Reservation_date;
+    private String Reservation_time;
+    private String Trans_id;
+    private String Reservation_place,Reservation_place2;
 
 
-    //firebase日期
-    public static final Parcelable.Creator<Timestamp> CREATOR = null;
-
-
-    Date leave_uploaddate;
 
     public Reservation() {
+
     }
 
     public Reservation(String user_id, String user_name, String reservation_name, String reservation_date, String reservation_content,
-                       String reservation_time, String trans_id ) {
-        this.user_id = user_id;
-        this.user_name = user_name;
-        this.reservation_name = reservation_name;
-        this.reservation_date = reservation_date;
-        this.reservation_content = reservation_content;
-        this.reservation_time = reservation_time;
-        this.trans_id = trans_id;
-        }
+                       String reservation_time, String trans_id,String reservation_place, String reservation_place2) {
+        User_id = user_id;
+        User_name = user_name;
+        Reservation_name = reservation_name;
+        Reservation_date = reservation_date;
+        Reservation_time = reservation_time;
+        Reservation_place = reservation_place;
+        Reservation_place2 = reservation_place2;
+        Trans_id = trans_id;
+
+    }
+
 
 
 
     public String getUser_id() {
-        return user_id;
+        return User_id;
     }
 
     public void setUser_id(String user_id) {
-        this.user_id = user_id;
+        User_id = user_id;
     }
 
     public String getUser_name() {
-        return user_name;
+        return User_name;
     }
 
     public void setUser_name(String user_name) {
-        this.user_name = user_name;
+        User_name = user_name;
     }
 
     public String getTrans_id() {
-        return trans_id;
+        return Trans_id;
     }
 
     public void setTrans_id(String trans_id) {
-        this.trans_id = trans_id;
+        Trans_id = trans_id;
     }
 
     public String getReservation_name() {
-        return reservation_name;
+        return Reservation_name;
     }
 
     public void setReservation_name(String reservation_name) {
-        this.reservation_name = reservation_name;
+        Reservation_name = reservation_name;
     }
 
     public String getReservation_date() {
-        return reservation_date;
+        return Reservation_date;
     }
 
     public void setReservation_date(String reservation_date) {
-        this.reservation_date = reservation_date;
+        Reservation_date = reservation_date;
     }
 
-    public String getReservation_content() {
-        return reservation_content;
-    }
 
-    public void setReservation_content(String reservation_content) {
-        this.reservation_content = reservation_content;
-    }
 
     public String getReservation_time() {
-        return reservation_time;
+        return Reservation_time;
     }
 
     public void setReservation_time(String reservation_time) {
-        this.reservation_time = reservation_time;
+        Reservation_time = reservation_time;
+    }
+    public String getReservation_place() {
+        return Reservation_place;
     }
 
-    public String getReservation_photoUrl() {
-        return reservation_photoUrl;
+    public void setReservation_place(String reservation_place) {
+        Reservation_place = reservation_place;
     }
 
-    public void setReservation_photoUrl(String reservation_photoUrl) {
-        this.reservation_photoUrl = reservation_photoUrl;
+    public String getReservation_place2() {
+        return Reservation_place2;
+    }
+
+    public void setReservation_place2(String reservation_place2) {
+        Reservation_place2 = reservation_place2;
     }
 
 
-
-    //Date
-    public Date getReservation_uploaddate() {
-        return reservation_uploaddate;
-    }
-
-    public void setReservation_uploaddate(Date reservation_date) {
-        this.reservation_uploaddate = reservation_date;
-    }
 
 }

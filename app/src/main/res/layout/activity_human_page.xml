@@ -24,12 +24,10 @@
 
                 <ImageView
                     android:id="@+id/human_image"
-                    android:layout_width="130dp"
+                    android:layout_width="100dp"
                     android:layout_height="200dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="25dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
@@ -37,7 +35,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -45,48 +42,56 @@
 
                         <TextView
                             android:id="@+id/human_name"
-                            android:layout_width="150dp"
+                            android:layout_width="200dp"
                             android:layout_height="30dp"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
                             android:text="ANDREW"
                             android:textSize="20dp" />
-
                         <TextView
                             android:id="@+id/human_age"
                             android:layout_width="20dp"
                             android:layout_height="15dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginLeft="0dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:text="34"
                             android:textSize="12sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="15dp"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginRight="0dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginRight="0dp"
+                            android:layout_marginBottom="5dp"
                             android:text="歲 "
                             android:textSize="12sp" />
-
                         <TextView
                             android:id="@+id/human_sex"
                             android:layout_width="20dp"
                             android:layout_height="15dp"
-                            android:layout_marginBottom="5dp"
                             android:layout_marginLeft="0dp"
                             android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:text="男"
                             android:textSize="12sp" />
-                    </LinearLayout>
+                    </LinearLayout>>
 
+                    <TextView
+                        android:id="@+id/human_ava"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:text="可預約" />
+
+                    <TextView
+                        android:id="@+id/human_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:text="時段" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
-                        android:layout_marginTop="10dp"
                         android:text="所在城市"
                         android:textColor="@color/colorblack"
                         android:textSize="15dp" />
@@ -138,22 +143,29 @@
                 </LinearLayout>
 
             </LinearLayout>
-            <!--<View-->
-                <!--android:layout_width="400dp"-->
-                <!--android:layout_height="2dp"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:background="#1d90cf"/>-->
+
+            <Button
+                android:id="@+id/book_care"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="我要預約"
+                android:background="@drawable/white_border"
+                />
+
             <Button
                 android:id="@+id/add_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="我要寫評論"
-                android:background="@drawable/white_border"
-                />
+                android:text="我要寫評論" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/review_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/human_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

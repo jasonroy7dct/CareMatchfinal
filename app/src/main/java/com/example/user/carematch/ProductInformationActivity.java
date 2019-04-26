@@ -55,7 +55,7 @@ public class ProductInformationActivity extends AppCompatActivity {
         final String y = intent.getStringExtra("lon");
         productsName=(TextView)findViewById(R.id.products_name);
         productsStorename=(TextView)findViewById(R.id.products_storename);
-        productsTitle=(TextView) findViewById(R.id.products_title);
+//        productsTitle=(TextView) findViewById(R.id.products_title);
         productsDetails=(TextView) findViewById(R.id.products_details);
         productsImage=(ImageView) findViewById(R.id.products_image);
 
@@ -79,7 +79,7 @@ public class ProductInformationActivity extends AppCompatActivity {
                     if (document.exists()) {
                         storename = document.get("Products_storename").toString();
                         productsName.setText(document.get("Products_name").toString());
-//                                productsStorename.setText(document.get("Products_storename").toString());
+                                productsStorename.setText(document.get("Products_storename").toString());
                         productsDetails.setText(document.get("Products_details").toString());
 //                                productsTitle.setText(document.get("Products_title").toString());
                         String image = document.get("Products_image").toString();

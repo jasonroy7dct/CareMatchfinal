@@ -61,58 +61,7 @@ public class Products3Fragment extends Fragment {
         mMainList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mMainList.setAdapter(ProductsListAdapter);
 
-//        spnr = (Spinner)Medicalview.findViewById(R.id.spn);
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-//                this.getActivity(), android.R.layout.simple_spinner_item, type);
-//        spnr.setAdapter(adapter);
-//        spnr.setOnItemSelectedListener(
-//                new AdapterView.OnItemSelectedListener() {
-//
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-//                                               int arg2, long arg3) {
-//
-//
-//                        position = spnr.getSelectedItemPosition();
-//                        Toast.makeText(getApplicationContext(),"請選擇商品",Toast.LENGTH_LONG).show();
-//
-//                        // TODO Auto-generated method stub
-//                        //
-//                        String key= type[+position].toString();
-//                        Log.d("aaaa",key);
-//                        if(key=="請選擇商品類型"){
-//                            db.collection("Products").addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-//                                    if (e != null) {
-//
-//                                        Log.d(TAG, "Error :" + e.getMessage());
-//
-//                                    }
-//                                    else {
-//                                        ProductsList.clear();
-//                                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-//
-//                                            if (doc.getType() == DocumentChange.Type.ADDED) {
-//
-//                                                String products_id = doc.getDocument().getId();
-//                                                Log.d(TAG, products_id);
-//
-//                                                Products products = doc.getDocument().toObject(Products.class).withId(products_id);//抓ID
-//                                                ProductsList.add(products);
-//                                                ProductsListAdapter.notifyDataSetChanged();
-//                                                Toast.makeText(getApplicationContext(),"您已選擇 "+type[+position],Toast.LENGTH_LONG).show();
-//
-//
-//                                            }
-//
-//                                        }
-//                                    }
-//
-//                                }
-//                            });
-//                        }else {
                             db.collection("Products")
                                     .orderBy("Products_name", Query.Direction.DESCENDING)
                                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
