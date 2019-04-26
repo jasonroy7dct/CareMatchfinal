@@ -39,7 +39,7 @@ public class BlogFragment2 extends Fragment {
 
     private RecyclerView blog_list_Rv;
     private List<BlogPost> blog_list;
-    private ImageButton test;
+    private ImageButton ok;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth;
